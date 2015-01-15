@@ -136,7 +136,7 @@ for istep, nstep in enumerate(nsteps):
                              index_col=1)
 
             # Extract Time
-            tout = df.time[0]
+            tout = df.head(1).time
 
             # Record Last Valid Step
             last_valid_step[idir] = nstep
