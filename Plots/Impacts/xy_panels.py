@@ -4,7 +4,8 @@ Plot XY. 6 Panels. Test and Massive Particles.
 Plot Hexbin Particle Density for Test Particles
 Plot Orbits for Massive Particles.
 
-Slower than reading from HDF5, but we save preprocessing/space.
+Speedup/slowdown wrt HDF5 reading varies. Probaly FS related.
+Still save on storage space and pre-processing.
 """
 
 import matplotlib as mpl; mpl.use('agg')
