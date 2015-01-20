@@ -91,8 +91,8 @@ if args.custom:
     # Build Output Number Array (From Input)
     nsteps = \
         np.mgrid[args.custom[0]:args.custom[1]+args.custom[2]:args.custom[2]]
-    print "// Using Outputs %012d:%012d:%012d" % \
-        ( args.custom[0], args.custom[1], args.custom[2] )
+    print "// Using Outputs %012d:%012d:%012d (%i Total)" % \
+        ( args.custom[0], args.custom[1], args.custom[2], len(nsteps) )
 
 # Set Unset Tag
 if not args.tag:
