@@ -468,4 +468,8 @@ for istep, nstep in enumerate(nsteps):
     fig.savefig("qQaei_%012d.png" % nstep)
     plt.close(fig)
 
+    # Clean Up
+    del df
+    del dfx
+
 print "// (%s UTC) Done" % strftime("%H:%M:%S", gmtime())
