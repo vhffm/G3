@@ -180,9 +180,6 @@ for istep, nstep in enumerate(nsteps):
         #df = df.append(dfx, ignore_index=True)
         df = df.append(dfx)
 
-    # Drop duplicates
-    df.drop_duplicates(inplace=True)
-
     # Check if massive planets are (still) in sync
     if not diverged:
         if np.sum(df.drop_duplicates().index.isin([0,1,2,3,4,5,6,7,8])) > 9:
