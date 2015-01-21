@@ -170,15 +170,18 @@ for istep, nstep in enumerate(nsteps):
     # Loop Runs
     df = pd.DataFrame()
     for idir, cdir in enumerate(dirs):
-        dfx = pd.read_csv("%s/Out%s_%012d.dat" % \
-                          (cdir, run_names[idir], nstep), \
-                          sep=" ", \
-                          header=None, names=names_cols, dtype=types_cols, \
-                          usecols=touse_cols, \
-                          index_col=1)
-        #dfx.mass *= C.msun/C.mearth
-        #df = df.append(dfx, ignore_index=True)
-        df = df.append(dfx)
+        try:
+            dfx = pd.read_csv("%s/Out%s_%012d.dat" % \
+                              (cdir, run_names[idir], nstep), \
+                              sep=" ", header=None, \
+                              names=names_cols, dtype=types_cols, \
+                              usecols=touse_cols, \
+                              index_col=1)
+            #dfx.mass *= C.msun/C.mearth
+            #df = df.append(dfx, ignore_index=True)
+            df = df.append(dfx)
+        except IOError:
+            pass
 
     # Check if massive planets are (still) in sync
     if not diverged:
