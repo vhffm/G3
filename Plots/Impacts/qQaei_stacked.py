@@ -213,6 +213,9 @@ for istep, nstep in enumerate(nsteps):
     df["Q"] = df["a"] * ( 1 + df["e"] )
     df["q"] = df["a"] * ( 1 - df["e"] )
 
+    # Zero Inclinations Make Hexbin Plots Barf
+    df.i += 1.0e-14
+
     # Convert mass
     # df.mass *= C.msun/C.mearth
 
