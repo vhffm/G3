@@ -15,6 +15,7 @@ msaturn  = 5.68319e26 # kg
 muranus  = 8.68100e25 # kg
 mneptune = 1.02400e26 # kg
 mpluto   = 1.30900e22 # kg
+mmoon    = 7.34767e22 # kg
 
 # Angle Conversions
 r2d = 180.0 / np.pi
