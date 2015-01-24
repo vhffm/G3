@@ -30,3 +30,9 @@ G = G / 1000.0**3.0  # km3/kg/s2
 
 # Convenience
 twopi = 2.0 * np.pi
+
+# Genga Specific Conversions
+# Velocity Units [Genga Units <> km/s]
+# Test Case: Earth = 1 (Genga) = 30 (km/s)
+genga_to_kms = (twopi/365.25) * au2km/24.0/3600.0
+kms_to_genga = 1.0/genga_to_kms
