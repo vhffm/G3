@@ -101,6 +101,6 @@ for istep, nstep in enumerate(nsteps):
     fig.savefig("ae_%012d.png" % nstep)
 
     # Clean Up
-    del fig
+    plt.close(fig)
     del df
 
