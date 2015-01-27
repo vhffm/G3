@@ -22,6 +22,8 @@ c3 = b2m.get_map('Dark2', 'Qualitative', 3)
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument("--no_orbits", type="store_true", \
+                    help="Do Not Plot Ellipses.")
 parser.add_argument("--count_in", type=int, \
                     help='Determine Output Range from This Line In Dirlist')
 parser.add_argument("--tag", \
@@ -108,11 +110,12 @@ for istep, nstep in enumerate(nsteps):
     df = ph.read_output_and_stack(fnames)
 
     # Ellipses
-    xell, yell, _ = kh.compute_ellipseX(df[df.mass>0.0].a, \
-                                        df[df.mass>0.0].e, \
-                                        df[df.mass>0.0].i, \
-                                        df[df.mass>0.0].Omega, \
-                                        df[df.mass>0.0].omega)
+    if not args.no_orbits:
+        xell, yell, _ = kh.compute_ellipseX(df[df.mass>0.0].a, \
+                                            df[df.mass>0.0].e, \
+                                            df[df.mass>0.0].i, \
+                                            df[df.mass>0.0].Omega, \
+                                            df[df.mass>0.0].omega)
 
     # Plot
     fig, ax = plt.subplots(1,1)
@@ -130,7 +133,10 @@ for istep, nstep in enumerate(nsteps):
               alpha=1.0)
 
     # Plot Ellipses
-    ax.plot(xell[:-1,:].T, yell[:-1,:].T, color="k", linewidth=1.0, alpha=0.5)
+    if not args.no_orbits:
+        ax.plot(xell[:-1,:].T, \
+                yell[:-1,:].T, \
+                color="k", linewidth=1.0, alpha=0.5)
 
     # Style
     ax.set_aspect("equal")
@@ -144,8 +150,11 @@ for istep, nstep in enumerate(nsteps):
     ax.set_title("%s *** %.2e yr *** %012d steps" % \
                  (args.tag, df.head(1).time, nstep))
 
-    # # Save Figure
-    fig.savefig("xy_%012d.png" % nstep)
+    # Save Figure
+    if args.no_orbits:
+        fig.savefig("xyNoEllipses_%012d.png" % nstep)
+    else:
+        fig.savefig("xy_%012d.png" % nstep)
 
     # Clean Up
     plt.close(fig)
