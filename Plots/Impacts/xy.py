@@ -22,7 +22,7 @@ c3 = b2m.get_map('Dark2', 'Qualitative', 3)
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--no_orbits", type="store_true", \
+parser.add_argument("--no_orbits", action="store_true", \
                     help="Do Not Plot Ellipses.")
 parser.add_argument("--count_in", type=int, \
                     help='Determine Output Range from This Line In Dirlist')
