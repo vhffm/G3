@@ -95,7 +95,12 @@ for istep, nstep in enumerate(nsteps):
     ax.set_ylim([0,1])
     ax.set_xlabel("Semi-Major Axis (AU)")
     ax.set_ylabel("Eccentricity")
-    ax.set_title("%s" % args.tag)
+
+    # Title
+    # ax.set_title("%s" % args.tag)
+    # ax.set_title("%s *** %.2e yr *** %012d steps" % \
+    #              (args.tag, df.head(1).time, nstep))
+    ax.set_title("%s *** %.2e yr" % (args.tag, df.head(1).time))
 
     # Save Figure
     fig.savefig("ae_%012d.png" % nstep)
