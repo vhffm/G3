@@ -29,6 +29,25 @@ def helio2bary(r_h, v_h, m, return_sun=False, central_mass=1.0):
     else:
         return r, v
 
+def bary2helio(r_b, v_b, m, return_barycenter=False, central_mass=1.0):
+    """
+    Convert Bary- to Heliocentric Coordinates.
+    """
+
+    # Heliocenter Offsets
+    r_h = - np.sum(r_b * m) / central_mass
+    v_h = - np.sum(v_b * m) / central_mass
+
+    # New Coordinates
+    r = r_b - r_h
+    v = v_b - v_h
+
+    # Return
+    if return_barycenter:
+        return r, v, -r_h, -v_h
+    else:
+        return r, v
+
 def cart2kepX(x, y, z, vx, vy, vz, mass, central_mass=1.0):
     """
     Vectorized version of cart2kep. Much love for many particles.
