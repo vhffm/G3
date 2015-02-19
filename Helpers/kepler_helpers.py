@@ -283,13 +283,23 @@ def PQW(Omega, omega, inc):
 
 def nr(M, ecc, epsilon_target=1.0e-5):
     """
-    Newton-Raphson Iteration to Compute Eccentric Anomaly from Mean Anomaly.
+    Newton-Raphson Iteration.
+    Computes Eccentric/Hyperbolic Anomaly from Mean Anomaly.
+    Cf. Slide 13/26
+    http://mmae.iit.edu/~mpeet/Classes/MMAE441/Spacecraft/441Lecture17.pdf
     """
 
     Ei = M; ii = 1
     # print "Running Newton-Raphson for M=%.2e, e=%.2f" % ( M, ecc )
     while True:
-        Ei1 = Ei - ( Ei - ecc * np.sin(Ei) - M ) / (  1 - ecc * np.cos(Ei)  )
+        # Eccentric Anomaly
+        if ecc < 1.0:
+            Ei1 = Ei - \
+                ( Ei - ecc * np.sin(Ei) - M ) / (  1.0 - ecc * np.cos(Ei)  )
+        # Hyperbolic Anomaly
+        elif ecc > 1.0:
+            Ei1 = Ei + \
+                ( M - ecc * np.sinh(Ei) + Ei ) / ( ecc * np.cosh(Ei) - 1.0 )
         epsilon = np.abs(Ei1 - Ei)
         Ei = Ei1
         # print "Iteration %i, Residual %.2e" % ( ii, epsilon )
