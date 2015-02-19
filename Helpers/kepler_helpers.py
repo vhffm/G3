@@ -217,10 +217,13 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
     Cf. http://www.bruce-shapiro.com/pair/ElementConversionRecipes.pdf
     """
 
-    # Zero Inclination has no Argument of Perigee
-    # Set =0 by Convention
+    # Zero Inclination = No Line of Nodes
     if inc == 0.0:
         Omega = 0.0
+
+    # Ciruclar Orbit = No Argument of Perigee
+    if ecc == 0.0:
+        omega = 0.0
 
     # Mean Anomaly -> Eccentric Anomaly
     E = nr(M, ecc)
