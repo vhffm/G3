@@ -236,21 +236,8 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
     Vx = - a * np.sin(E) * Edot
     Vy =   a * np.sqrt(1.0 - ecc**2.0) * Edot * np.cos(E)
 
-    # Rotation Matrix Components (Orbit Frame => Inertial Frame)
-    # http://biomathman.com/pair/KeplerElements.pdf (End)
-    # http://astro.geo.tu-dresden.de/~klioner/celmech.pdf (Eqn. 2.30)
-    # NB: Shapiro Notation Tricky; Multiplies x = R.T * X, Dresden x = R * X
-    Px = np.cos(omega) * np.cos(Omega) - \
-         np.sin(omega) * np.cos(inc) * np.sin(Omega)
-    Py = np.cos(omega) * np.sin(Omega) + \
-         np.sin(omega) * np.cos(inc) * np.cos(Omega)
-    Pz = np.sin(omega) * np.sin(inc)
-
-    Qx = - np.sin(omega) * np.cos(Omega) - \
-           np.cos(omega) * np.cos(inc) * np.sin(Omega)
-    Qy = - np.sin(omega) * np.sin(Omega) + \
-           np.cos(omega) * np.cos(inc) * np.cos(Omega)
-    Qz =   np.sin(inc) * np.cos(omega)
+    # Rotation Matrix Components
+    Px, Py, Pz, Qx, Qy, Qz = PQW(Omega, omega, inc)
 
     # Rotate Positions
     x = X * Px + Y * Qx
@@ -326,18 +313,8 @@ def compute_ellipseX(a, ecc, inc, Omega, omega):
     E = np.linspace(0.0, 2.*np.pi, 128)
     E = E[np.newaxis,:]
 
-    # PQW Unit Vectors
-    Px = np.cos(omega) * np.cos(Omega) - \
-         np.sin(omega) * np.cos(inc) * np.sin(Omega)
-    Py = np.cos(omega) * np.sin(Omega) + \
-         np.sin(omega) * np.cos(inc) * np.cos(Omega)
-    Pz = np.sin(omega) * np.sin(inc)
-
-    Qx = - np.sin(omega) * np.cos(Omega) - \
-           np.cos(omega) * np.cos(inc) * np.sin(Omega)
-    Qy = - np.sin(omega) * np.sin(Omega) + \
-           np.cos(omega) * np.cos(inc) * np.cos(Omega)
-    Qz =   np.sin(inc) * np.cos(omega)
+    # Rotation Matrix Components
+    Px, Py, Pz, Qx, Qy, Qz = PQW(Omega, omega, inc)
 
     # Compute Ellipse
     x = a * (np.cos(E) - ecc) * Px + \
@@ -358,18 +335,8 @@ def compute_ellipse(a, ecc, inc, Omega, omega):
     # Eccentric Anomaly
     E = np.linspace(0.0, 2.*np.pi, 128)
 
-    # PQW Unit Vectors
-    Px = np.cos(omega) * np.cos(Omega) - \
-         np.sin(omega) * np.cos(inc) * np.sin(Omega)
-    Py = np.cos(omega) * np.sin(Omega) + \
-         np.sin(omega) * np.cos(inc) * np.cos(Omega)
-    Pz = np.sin(omega) * np.sin(inc)
-
-    Qx = - np.sin(omega) * np.cos(Omega) - \
-           np.cos(omega) * np.cos(inc) * np.sin(Omega)
-    Qy = - np.sin(omega) * np.sin(Omega) + \
-           np.cos(omega) * np.cos(inc) * np.cos(Omega)
-    Qz =   np.sin(inc) * np.cos(omega)
+    # Rotation Matrix Components
+    Px, Py, Pz, Qx, Qy, Qz = PQW(Omega, omega, inc)
 
     # Compute Ellipse
     x = a * (np.cos(E) - ecc) * Px + \
