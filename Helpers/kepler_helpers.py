@@ -225,7 +225,21 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
     # Mean Anomaly -> Eccentric Anomaly
     E = nr(M, ecc)
 
-    # PQW Unit Vectors
+    # Compute XY in Orbit Frame
+    X = a * (np.cos(E) - ecc)
+    Y = a * np.sqrt(1/0 - ecc**2.) * np.sin(E)
+
+    # Compute VX,VY in Orbit Frame
+    G = 1.0; mu = G * ( central_mass + mass )
+    n = np.sqrt(mu / a**3.0)
+    Edot = n / ( 1.0 - ecc * np.cos(E) )
+    Vx = - a * np.sin(E) * Edot
+    Vy =   a * np.sqrt(1.0 - ecc**2.0) * Edot * np.cos(E)
+
+    # Rotation Matrix Components (Orbit Frame => Inertial Frame)
+    # http://biomathman.com/pair/KeplerElements.pdf (End)
+    # http://astro.geo.tu-dresden.de/~klioner/celmech.pdf (Eqn. 2.30)
+    # NB: Shapiro Notation Tricky; Multiplies x = R.T * X, Dresden x = R * X
     Px = np.cos(omega) * np.cos(Omega) - \
          np.sin(omega) * np.cos(inc) * np.sin(Omega)
     Py = np.cos(omega) * np.sin(Omega) + \
@@ -238,22 +252,22 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
            np.cos(omega) * np.cos(inc) * np.cos(Omega)
     Qz =   np.sin(inc) * np.cos(omega)
 
-    P = np.array([Px, Py, Pz])
-    Q = np.array([Qx, Qy, Qz])
+    # Rotate Positions
+    x = X * Px + Y * Qx
+    y = X * Py + Y * Qy
+    z = X * Pz + Y * Qz
 
-    # Position
-    x = a * (np.cos(E) - ecc) * P + \
-        a * np.sqrt(1 - ecc**2.) * np.sin(E) * Q
+    # Rotate Velocities
+    vx = Vx * Px + Vy * Qx
+    vy = Vx * Py + Vy * Qy
+    vz = Vx * Pz + Vy * Qz
 
-    # Velocity
-    G = 1.0
-    mu = G * ( central_mass + mass )
-    Edot = np.sqrt(mu / a**3.) / ( 1. - ecc * np.cos(E) )
-    v = - a * np.sin(E) * Edot * P + \
-          a * np.sqrt(1. - ecc**2.) * np.cos(E) * Edot * Q
+    # Build Arrays
+    r = np.array([x,y,z])
+    v = np.array([vx,vy,vz])
 
     # Return
-    return x, v
+    return r, v
 
 def nr(M, ecc, epsilon_target=1.0e-5):
     """
