@@ -189,13 +189,29 @@ def cart2kep(r, v, mass, central_mass=1.0):
     if np.dot(r,v) < 0:
         theta = 2. * np.pi - theta
 
-    # Eccentric Anomaly
-    E = np.arccos((ecc + np.cos(theta)) / (1 + ecc * np.cos(theta)))
-    if np.pi < theta and theta < 2. * np.pi:
-        E = 2. * np.pi - E
+    # Eccentric, Circular
+    if ecc < 1.0:
+        
+        # Eccentric Anomaly
+        E = np.arccos((ecc + np.cos(theta)) / (1 + ecc * np.cos(theta)))
+        if np.pi < theta and theta < 2. * np.pi:
+            E = 2. * np.pi - E
 
-    # Mean Anomaly
-    M = E - ecc * np.sin(E)
+        # Mean Anomaly
+        M = E - ecc * np.sin(E)
+    
+    # Hyperbolic
+    elif ecc > 1.0:
+        
+        # Hyperbolic Anomaly
+        H = 2.0 * np.arctanh(np.sqrt((ecc-1.0)/(ecc+1.0)) * np.tan(theta/2.0))
+        
+        # Mean Anomlay
+        M = ecc * np.sinh(H) - H
+    
+    # Parabolic
+    elif ecc == 1.0:
+        raise Exception("Parabolic Orbits Unsupported.")
 
     # Return Set
     return a, ecc, inc, Omega, omega, M
@@ -225,19 +241,43 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
     if ecc == 0.0:
         omega = 0.0
 
-    # Mean Anomaly -> Eccentric Anomaly
+    # Mean Anomaly -> Eccentric/Hyperbolic Anomaly
     E = nr(M, ecc)
+        
+    # Eccentric, Circular
+    if ecc < 1.0:
 
-    # Compute XY in Orbit Frame
-    X = a * (np.cos(E) - ecc)
-    Y = a * np.sqrt(1/0 - ecc**2.) * np.sin(E)
+        # Compute XY in Orbit Frame
+        X = a * (np.cos(E) - ecc)
+        Y = a * np.sqrt(1.0 - ecc**2.) * np.sin(E)
 
-    # Compute VX,VY in Orbit Frame
-    G = 1.0; mu = G * ( central_mass + mass )
-    n = np.sqrt(mu / a**3.0)
-    Edot = n / ( 1.0 - ecc * np.cos(E) )
-    Vx = - a * np.sin(E) * Edot
-    Vy =   a * np.sqrt(1.0 - ecc**2.0) * Edot * np.cos(E)
+        # Compute VX,VY in Orbit Frame
+        G = 1.0; mu = G * ( central_mass + mass )
+        n = np.sqrt(mu / a**3.0)
+        Edot = n / ( 1.0 - ecc * np.cos(E) )
+        Vx = - a * np.sin(E) * Edot
+        Vy =   a * np.sqrt(1.0 - ecc**2.0) * Edot * np.cos(E)
+
+    # Hyperbolic
+    elif ecc > 1.0:
+
+        # Convenience
+        H = E
+        
+        # Compute XY in Orbit Frame
+        X = np.abs(a) * ( ecc - np.cosh(H) )
+        Y = np.abs(a) * np.sqrt(ecc**1.0 - 1.0) * np.sinh(H)
+
+        # Compute VX,VY in Orbit Frame
+        G = 1.0; mu = G * ( central_mass + mass )
+        n = np.sqrt(mu / np.abs(a)**3.0)
+        Hdot = n / ( ecc * np.cosh(H) - 1.0 )
+        Vx = np.abs(a) * Hdot - np.sinh(H)
+        Vy = np.abs(a) * np.sqrt(ecc**2.0 - 1.0) * Hdot * np.cosh(H)
+
+    # Parabolic
+    elif ecc == 1.0:
+        raise Exception("Parabolic Orbits Unsupported.")
 
     # Rotation Matrix Components
     Px, Py, Pz, Qx, Qy, Qz = PQW(Omega, omega, inc)
@@ -344,23 +384,41 @@ def compute_ellipseX(a, ecc, inc, Omega, omega):
 
 def compute_ellipse(a, ecc, inc, Omega, omega):
     """
-    Compute XYZ Sequence for a Kepler Ellipse.
+    Compute XYZ Sequence for a Kepler Ellipses/Hyperbolas.
     """
-
-    # Eccentric Anomaly
-    E = np.linspace(0.0, 2.*np.pi, 128)
+  
+    # Eccentric, Circular
+    if ecc < 1.0:
+        
+        # Eccentric Anomaly
+        E = np.linspace(0.0, 2.*np.pi, 128)
+        
+        # Compute XY in Orbit Frame
+        X = a * (np.cos(E) - ecc)
+        Y = a * np.sqrt(1.0 - ecc**2.) * np.sin(E)
+    
+    # Hyperbolic
+    elif ecc > 1.0:
+        
+        # Hyperbolic Anomaly
+        H = np.linspace(-np.pi/2.0, np.pi/2.0, 128)
+        
+        # Compute XY in Orbit Frame
+        X = np.abs(a) * ( ecc - np.cosh(H) )
+        Y = np.abs(a) * np.sqrt(ecc**1.0 - 1.0) * np.sinh(H)
+    
+    # Parabolic
+    elif ecc == 1.0:
+        raise Exception("Parabolic Orbits Unsupported.")
 
     # Rotation Matrix Components
     Px, Py, Pz, Qx, Qy, Qz = PQW(Omega, omega, inc)
 
-    # Compute Ellipse
-    x = a * (np.cos(E) - ecc) * Px + \
-        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qx
-    y = a * (np.cos(E) - ecc) * Py + \
-        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qy
-    z = a * (np.cos(E) - ecc) * Pz + \
-        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qz
-
+    # Rotate Positions
+    x = X * Px + Y * Qx
+    y = X * Py + Y * Qy
+    z = X * Pz + Y * Qz
+    
     # Return
     return x, y, z
 
