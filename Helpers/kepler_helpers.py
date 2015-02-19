@@ -295,6 +295,8 @@ def nr(M, ecc, epsilon_target=1.0e-5):
         # print "Iteration %i, Residual %.2e" % ( ii, epsilon )
         if epsilon < epsilon_target:
             break
+        if ii > 100:
+            raise Exception("NR Iteration Failed To Converge.")
         ii += 1
     # print "Found E=%.2f" % Ei1
     return Ei1
