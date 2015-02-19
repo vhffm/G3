@@ -269,6 +269,28 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
     # Return
     return r, v
 
+def PQW(Omega, omega, inc):
+    """
+    Rotation Matrix Components (Orbit Frame => Inertial Frame)
+    http://biomathman.com/pair/KeplerElements.pdf (End)
+    http://astro.geo.tu-dresden.de/~klioner/celmech.pdf (Eqn. 2.30)
+    NB: Shapiro Notation Tricky; Multiplies x = R.T * X, Dresden x = R * X
+    """
+
+    Px = np.cos(omega) * np.cos(Omega) - \
+         np.sin(omega) * np.cos(inc) * np.sin(Omega)
+    Py = np.cos(omega) * np.sin(Omega) + \
+         np.sin(omega) * np.cos(inc) * np.cos(Omega)
+    Pz = np.sin(omega) * np.sin(inc)
+
+    Qx = - np.sin(omega) * np.cos(Omega) - \
+           np.cos(omega) * np.cos(inc) * np.sin(Omega)
+    Qy = - np.sin(omega) * np.sin(Omega) + \
+           np.cos(omega) * np.cos(inc) * np.cos(Omega)
+    Qz =   np.sin(inc) * np.cos(omega)
+
+    return Px, Py, Pz, Qx, Qy, Qz
+
 def nr(M, ecc, epsilon_target=1.0e-5):
     """
     Newton-Raphson Iteration to Compute Eccentric Anomaly from Mean Anomaly.
