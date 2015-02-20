@@ -204,7 +204,7 @@ def cart2kep(r, v, mass, central_mass=1.0):
     elif ecc > 1.0:
         
         # Hyperbolic Anomaly
-        H = 2.0 * np.arctanh(np.sqrt((ecc-1.0)/(ecc+1.0)) * np.tan(theta/2.0))
+        H = np.arccosh((ecc + np.cos(theta)) / (1.0 + ecc * np.cos(theta)))
         
         # Mean Anomlay
         M = ecc * np.sinh(H) - H
