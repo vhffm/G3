@@ -266,14 +266,14 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
         
         # Compute XY in Orbit Frame
         X = np.abs(a) * ( ecc - np.cosh(H) )
-        Y = np.abs(a) * np.sqrt(ecc**1.0 - 1.0) * np.sinh(H)
+        Y = np.abs(a) * np.sqrt(ecc**2.0 - 1.0) * np.sinh(H)
 
         # Compute VX,VY in Orbit Frame
         G = 1.0; mu = G * ( central_mass + mass )
         n = np.sqrt(mu / np.abs(a)**3.0)
         Hdot = n / ( ecc * np.cosh(H) - 1.0 )
-        Vx = np.abs(a) * Hdot - np.sinh(H)
-        Vy = np.abs(a) * np.sqrt(ecc**2.0 - 1.0) * Hdot * np.cosh(H)
+        Vx = - np.abs(a) * Hdot * np.sinh(H)
+        Vy =   np.abs(a) * np.sqrt(ecc**2.0 - 1.0) * Hdot * np.cosh(H)
 
     # Parabolic
     elif ecc == 1.0:
