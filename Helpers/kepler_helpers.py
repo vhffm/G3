@@ -409,7 +409,7 @@ def compute_ellipse(a, ecc, inc, Omega, omega):
         
         # Compute XY in Orbit Frame
         X = np.abs(a) * ( ecc - np.cosh(H) )
-        Y = np.abs(a) * np.sqrt(ecc**1.0 - 1.0) * np.sinh(H)
+        Y = np.abs(a) * np.sqrt(ecc**2.0 - 1.0) * np.sinh(H)
     
     # Parabolic
     elif ecc == 1.0:
