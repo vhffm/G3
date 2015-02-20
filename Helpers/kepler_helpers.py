@@ -208,6 +208,10 @@ def cart2kep(r, v, mass, central_mass=1.0):
         
         # Mean Anomlay
         M = ecc * np.sinh(H) - H
+
+        # Flip Around Focus?
+        if np.pi < theta and theta < 2. * np.pi:
+            M *= -1.0
     
     # Parabolic
     elif ecc == 1.0:
