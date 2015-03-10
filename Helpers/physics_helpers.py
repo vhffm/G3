@@ -5,21 +5,6 @@ Simple Physics Helper Functions.
 import numpy as np
 
 
-def rotate_xy(xin, yin, theta):
-    """
-    Rotate 2d vectors over angle theta.
-
-    @param xin - x-component - [any]
-    @param yin - y-component - [any]
-    @param theta - rotation angle - [rad]
-    @return xout, yout - rotated x/y-components - [any]
-    """
-
-    xout = np.cos(theta) * xin - np.sin(theta) * yin
-    yout = np.sin(theta) * xin + np.cos(theta) * yin
-    return xout, yout
-
-
 def mass2radius(mass, rho=2.0):
     """
     Convert mass to radius. Assuming sphere.

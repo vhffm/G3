@@ -42,3 +42,18 @@ def compute_angle(x1,y1,z1,x2,y2,z2,vanilla=True):
         return theta
     else:
         return theta, cos_theta, sin_theta
+
+
+def rotate_xy(xin, yin, theta):
+    """
+    Rotate 2d vectors over angle theta.
+
+    @param xin - x-component - [any]
+    @param yin - y-component - [any]
+    @param theta - rotation angle - [rad]
+    @return xout, yout - rotated x/y-components - [any]
+    """
+
+    xout = np.cos(theta) * xin - np.sin(theta) * yin
+    yout = np.sin(theta) * xin + np.cos(theta) * yin
+    return xout, yout
