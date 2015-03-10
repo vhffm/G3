@@ -2,6 +2,9 @@
 Simple Physics Helper Functions.
 """
 
+import numpy as np
+
+
 def rotate_xy(xin, yin, theta):
     """
     Rotate 2d vectors over angle theta.
