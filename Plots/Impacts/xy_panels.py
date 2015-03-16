@@ -199,6 +199,8 @@ for istep, nstep in enumerate(nsteps):
 
             # Clean Up
             del df
+            del dfm
+            del df0
 
         except:
             fname = "%s/Out%s_%012d.dat" % (cdir, run_names[idir], \
@@ -265,6 +267,8 @@ for istep, nstep in enumerate(nsteps):
 
             # Clean Up
             del df
+            del dfm
+            del df0
 
         # Set Scale
         # for ax in axflat:
