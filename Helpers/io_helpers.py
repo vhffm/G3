@@ -126,8 +126,8 @@ def read_collisions_and_stack(fnames):
         df = df.append(dfx, ignore_index=True)
 
     # Fix Mass
-    dfx.mi *= C.msun/C.mearth
-    dfx.mj *= C.msun/C.mearth
+    df.mi *= C.msun/C.mearth
+    df.mj *= C.msun/C.mearth
 
     # Return
     return df
