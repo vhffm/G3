@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import kepler_helpers as kh
 import other_helpers as oh
-import pandas_helpers as ph
+import io_helpers as ioh
 import constants as C
 import brewer2mpl as b2m
 import argparse
@@ -99,7 +99,7 @@ for idir, cdir in enumerate(dirs):
 cfnames = []
 for idir, cdir in enumerate(dirs):
     cfnames.append("%s/Collisions%s.dat" % (cdir, run_names[idir]))
-dfcoll = ph.read_collisions_and_stack(cfnames)
+dfcoll = ioh.read_collisions_and_stack(cfnames)
 
 # Loop Steps
 for istep, nstep in enumerate(nsteps):
@@ -111,7 +111,7 @@ for istep, nstep in enumerate(nsteps):
     for idir, cdir in enumerate(dirs):
         fnames.append("%s/Out%s_%012d.dat" % \
                       (cdir, run_names[idir], nstep))
-    df = ph.read_output_and_stack(fnames)
+    df = ioh.read_output_and_stack(fnames)
 
     # Revert Mass Scaling
     df.mass *= C.mearth/C.msun

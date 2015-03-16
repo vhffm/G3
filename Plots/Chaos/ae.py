@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import kepler_helpers as kh
 import other_helpers as oh
-import pandas_helpers as ph
+import ioh_helpers as ioh
 import constants as C
 import brewer2mpl as b2m
 import argparse
@@ -80,7 +80,7 @@ for istep, nstep in enumerate(nsteps):
 
     # Load
     fname = "Out%s_%012d.dat" % (run_name, nstep)
-    df = ph.read_output(fname)
+    df = ioh.read_output(fname)
 
     # Plot
     fig, ax = plt.subplots(1,1)
