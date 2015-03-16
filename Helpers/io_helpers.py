@@ -24,8 +24,7 @@ def read_output(fname):
                      sep=" ", \
                      header=None, \
                      names=names_cols, dtype=types_cols, \
-                     usecols=touse_cols, \
-                     index_col=1)
+                     usecols=touse_cols)
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
@@ -70,17 +69,14 @@ def read_output_and_stack(fnames):
                               sep=" ", \
                               header=None, \
                               names=names_cols, dtype=types_cols, \
-                              usecols=touse_cols, \
-                              index_col=1)
+                              usecols=touse_cols)
             df = df.append(dfx)
         except IOError:
             pass
 
     # Drop Duplicate Indices
     # http://stackoverflow.com/questions/13035764/remove-rows-with-duplicate-indices-pandas-dataframe-and-timeseries
-    df["index"] = df.index
-    df.drop_duplicates(subset=["index"], inplace=True)
-    del df["index"]
+    df.drop_duplicates(subset=["pid"], inplace=True)
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
