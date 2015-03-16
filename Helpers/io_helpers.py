@@ -132,3 +132,30 @@ def read_collisions_and_stack(fnames):
     # Return
     return df
 
+# Stack Ejection Files For Multiple Genga Outputs
+# fnames = [ fname01, fname02, ... ]
+def read_ejections_and_stack(fnames):
+    names_cols = [ "time", \
+                   "index", "m", "r", \
+                   "x", "y", "z", \
+                   "vx", "vy", "vz", \
+                   "Sx", "Sy", "Sz", \
+                   "case" ]
+    # touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9, 13 ]
+    touse_cols = [ 0, 1, 2, 13 ]
+    types_cols = { "index": np.int32, "case": np.int32 }
+
+    # Load CSV
+    df = pd.DataFrame()
+    for fname in fnames:
+        dfx = pd.read_csv(fname, \
+                          sep=" ", \
+                          header=None, names=names_cols, dtype=types_cols, \
+                          usecols=touse_cols)
+        df = df.append(dfx, ignore_index=True)
+
+    # Fix Mass
+    df.m *= C.msun/C.mearth
+
+    # Return
+    return df
