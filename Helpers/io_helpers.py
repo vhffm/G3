@@ -72,7 +72,7 @@ def read_output_and_stack(fnames):
                               usecols=touse_cols)
             df = df.append(dfx)
         except IOError:
-            pass
+            raise Exception("File Not Found: %s" % fname)
 
     # Drop Duplicate Indices
     # http://stackoverflow.com/questions/13035764/remove-rows-with-duplicate-indices-pandas-dataframe-and-timeseries
