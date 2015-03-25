@@ -20,11 +20,14 @@ def read_output(fname):
     types_cols = { "pid": np.int32 }
 
     # Load CSV
-    df = pd.read_csv(fname, \
-                     sep=" ", \
-                     header=None, \
-                     names=names_cols, dtype=types_cols, \
-                     usecols=touse_cols)
+    try:
+        df = pd.read_csv(fname, \
+                         sep=" ", \
+                         header=None, \
+                         names=names_cols, dtype=types_cols, \
+                         usecols=touse_cols)
+    except IOError:
+         raise Exception("File Not Found: %s" % fname)
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
@@ -119,11 +122,15 @@ def read_collisions_and_stack(fnames):
     # Load CSV
     df = pd.DataFrame()
     for fname in fnames:
-        dfx = pd.read_csv(fname, \
-                          sep=" ", \
-                          header=None, names=names_cols, dtype=types_cols, \
-                          usecols=touse_cols)
-        df = df.append(dfx, ignore_index=True)
+        try:
+            dfx = pd.read_csv(fname, \
+                              sep=" ", \
+                              header=None, names=names_cols, \
+                              dtype=types_cols, \
+                              usecols=touse_cols)
+            df = df.append(dfx, ignore_index=True)
+        except IOError:
+            raise Exception("File Not Found: %s" % fname)
 
     # Fix Mass
     df.mi *= C.msun/C.mearth
@@ -148,11 +155,15 @@ def read_ejections_and_stack(fnames):
     # Load CSV
     df = pd.DataFrame()
     for fname in fnames:
-        dfx = pd.read_csv(fname, \
-                          sep=" ", \
-                          header=None, names=names_cols, dtype=types_cols, \
-                          usecols=touse_cols)
-        df = df.append(dfx, ignore_index=True)
+        try:
+            dfx = pd.read_csv(fname, \
+                              sep=" ", \
+                              header=None, names=names_cols, \
+                              dtype=types_cols, \
+                              usecols=touse_cols)
+            df = df.append(dfx, ignore_index=True)
+        except IOError:
+            raise Exception("File Not Found: %s" % fname)
 
     # Fix Mass
     df.m *= C.msun/C.mearth
