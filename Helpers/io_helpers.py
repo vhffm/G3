@@ -8,7 +8,7 @@ import kepler_helpers as kh
 import constants as C
 
 # Single Genga Output
-def read_output(fname):
+def read_output(fname, frame):
     names_cols = [ "time", "pid", "mass", "radius", \
                    "x", "y", "z", \
                    "vx", "vy", "vz", \
@@ -18,6 +18,12 @@ def read_output(fname):
                    "test", "X" ]
     touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9 ]
     types_cols = { "pid": np.int32 }
+
+    # User must pick reference frame
+    # Genga outputs are heliocentric by default
+    if not frame in [ "barycentric", "heliocentric" ]:
+        estring = "Must Select Heliocentric/Barycentric Frame"
+        raise Exception(estring)
 
     # Load CSV
     try:
@@ -35,9 +41,10 @@ def read_output(fname):
     m = np.asarray(df.mass)
 
     # Barycentric Coordinates
-    x, vx = kh.helio2bary(x, vx, m)
-    y, vy = kh.helio2bary(y, vy, m)
-    z, vz = kh.helio2bary(z, vz, m)
+    if frame == "barycentric":
+        x, vx = kh.helio2bary(x, vx, m)
+        y, vy = kh.helio2bary(y, vy, m)
+        z, vz = kh.helio2bary(z, vz, m)
 
     # Compute Orbital Elements
     df["a"], df["e"], df["i"], df["Omega"], df["omega"], df["M"] = \
@@ -53,7 +60,7 @@ def read_output(fname):
 
 # Stack Multiple Genga Outputs, Remove Duplicate IDs
 # fnames = [ fname01, fname02, ... ]
-def read_output_and_stack(fnames):
+def read_output_and_stack(fnames, frame):
     names_cols = [ "time", "pid", "mass", "radius", \
                    "x", "y", "z", \
                    "vx", "vy", "vz", \
@@ -63,6 +70,12 @@ def read_output_and_stack(fnames):
                    "test", "X" ]
     touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9 ]
     types_cols = { "pid": np.int32 }
+
+    # User must pick reference frame
+    # Genga outputs are heliocentric by default
+    if not frame in [ "barycentric", "heliocentric" ]:
+        estring = "Must Select Heliocentric/Barycentric Frame"
+        raise Exception(estring)
 
     # Load CSV
     df = pd.DataFrame()
@@ -87,9 +100,10 @@ def read_output_and_stack(fnames):
     m = np.asarray(df.mass)
 
     # Barycentric Coordinates
-    x, vx = kh.helio2bary(x, vx, m)
-    y, vy = kh.helio2bary(y, vy, m)
-    z, vz = kh.helio2bary(z, vz, m)
+    if frame == "barycentric":
+        x, vx = kh.helio2bary(x, vx, m)
+        y, vy = kh.helio2bary(y, vy, m)
+        z, vz = kh.helio2bary(z, vz, m)
 
     # Compute Orbital Elements
     df["a"], df["e"], df["i"], df["Omega"], df["omega"], df["M"] = \
