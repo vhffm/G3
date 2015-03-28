@@ -16,7 +16,7 @@ def read_output(fname, frame):
                    "amin", "amax", "emin", "emax", \
                    "aecount", "aecountT", "enccount", \
                    "test", "X" ]
-    touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9 ]
+    touse_cols = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
     types_cols = { "pid": np.int32 }
 
     # User must pick reference frame
@@ -68,7 +68,7 @@ def read_output_and_stack(fnames, frame):
                    "amin", "amax", "emin", "emax", \
                    "aecount", "aecountT", "enccount", \
                    "test", "X" ]
-    touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9 ]
+    touse_cols = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
     types_cols = { "pid": np.int32 }
 
     # User must pick reference frame
