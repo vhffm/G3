@@ -121,17 +121,17 @@ def read_output_and_stack(fnames, frame):
 # fnames = [ fname01, fname02, ... ]
 def read_collisions_and_stack(fnames):
     names_cols = [ "time", \
-                   "indexi", "mi", "ri", \
+                   "pidi", "mi", "ri", \
                    "xi", "yi", "zi", \
                    "vxi", "vyi", "vzi", \
                    "Sxi", "Syi", "Szi", \
-                   "indexj", "mj", "rj", \
+                   "pidj", "mj", "rj", \
                    "xj", "yj", "zj", \
                    "vxj", "vyj", "vzj", \
                    "Sxj", "Syj", "Szj", "X" ]
     # touse_cols = [ 0, 1, 2, 4, 5, 6, 13, 14, 16, 17, 18 ]
     touse_cols = [ 0, 1, 2, 13, 14 ]
-    types_cols = { "indexi": np.int32, "indexj": np.int32 }
+    types_cols = { "pidi": np.int32, "pidj": np.int32 }
 
     # Load CSV
     df = pd.DataFrame()
@@ -157,14 +157,14 @@ def read_collisions_and_stack(fnames):
 # fnames = [ fname01, fname02, ... ]
 def read_ejections_and_stack(fnames):
     names_cols = [ "time", \
-                   "index", "m", "r", \
+                   "pid", "m", "r", \
                    "x", "y", "z", \
                    "vx", "vy", "vz", \
                    "Sx", "Sy", "Sz", \
                    "case" ]
     # touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9, 13 ]
     touse_cols = [ 0, 1, 2, 13 ]
-    types_cols = { "index": np.int32, "case": np.int32 }
+    types_cols = { "pid": np.int32, "case": np.int32 }
 
     # Load CSV
     df = pd.DataFrame()
