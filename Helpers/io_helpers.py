@@ -119,7 +119,7 @@ def read_output_and_stack(fnames, frame):
 
 # Stack Collision Files For Multiple Genga Outputs
 # fnames = [ fname01, fname02, ... ]
-def read_collisions_and_stack(fnames):
+def read_collisions_and_stack(fnames, return_xyz=False):
     names_cols = [ "time", \
                    "pidi", "mi", "ri", \
                    "xi", "yi", "zi", \
@@ -129,8 +129,10 @@ def read_collisions_and_stack(fnames):
                    "xj", "yj", "zj", \
                    "vxj", "vyj", "vzj", \
                    "Sxj", "Syj", "Szj", "X" ]
-    # touse_cols = [ 0, 1, 2, 4, 5, 6, 13, 14, 16, 17, 18 ]
-    touse_cols = [ 0, 1, 2, 13, 14 ]
+    if return_xyz:
+        touse_cols = [ 0, 1, 2, 4, 5, 6, 13, 14, 16, 17, 18 ]
+    else:
+        touse_cols = [ 0, 1, 2, 13, 14 ]
     types_cols = { "pidi": np.int32, "pidj": np.int32 }
 
     # Load CSV
