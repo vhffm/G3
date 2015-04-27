@@ -152,6 +152,15 @@ def read_collisions_and_stack(fnames, return_xyz=False):
     df.mi *= C.msun/C.mearth
     df.mj *= C.msun/C.mearth
 
+    # Fix Velocities
+    if return_xyz:
+        df.vxi *= C.genga_to_kms
+        df.vyi *= C.genga_to_kms
+        df.vzi *= C.genga_to_kms
+        df.vxj *= C.genga_to_kms
+        df.vyj *= C.genga_to_kms
+        df.vzj *= C.genga_to_kms
+
     # Return
     return df
 
