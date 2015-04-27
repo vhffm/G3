@@ -152,7 +152,7 @@ def read_collisions_and_stack(fnames, return_xyz=False):
     df.mi *= C.msun/C.mearth
     df.mj *= C.msun/C.mearth
 
-    # Fix Velocities
+    # Fix Velocities, Return Relative Velocity (=Impact Velocity)
     if return_xyz:
         df.vxi *= C.genga_to_kms
         df.vyi *= C.genga_to_kms
@@ -160,6 +160,9 @@ def read_collisions_and_stack(fnames, return_xyz=False):
         df.vxj *= C.genga_to_kms
         df.vyj *= C.genga_to_kms
         df.vzj *= C.genga_to_kms
+        df["dv"] = np.sqrt((df.vxi-df.vxj)**2.0 + \
+                           (df.vyi-df.vyj)**2.0 + \
+                           (df.vzi-df.vzj)**2.0)
 
     # Return
     return df
