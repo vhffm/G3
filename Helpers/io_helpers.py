@@ -130,7 +130,7 @@ def read_collisions_and_stack(fnames, return_xyz=False):
                    "vxj", "vyj", "vzj", \
                    "Sxj", "Syj", "Szj", "X" ]
     if return_xyz:
-        touse_cols = [ 0, 1, 2, 4, 5, 6, 13, 14, 16, 17, 18 ]
+        touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9, 13, 14, 16, 17, 18, 19, 20, 21 ]
     else:
         touse_cols = [ 0, 1, 2, 13, 14 ]
     types_cols = { "pidi": np.int32, "pidj": np.int32 }
