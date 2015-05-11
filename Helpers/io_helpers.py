@@ -60,7 +60,7 @@ def read_output(fname, frame):
 
 # Stack Multiple Genga Outputs, Remove Duplicate IDs
 # fnames = [ fname01, fname02, ... ]
-def read_output_and_stack(fnames, frame):
+def read_output_and_stack(fnames, frame, drop_duplicates=True):
     names_cols = [ "time", "pid", "mass", "radius", \
                    "x", "y", "z", \
                    "vx", "vy", "vz", \
@@ -92,7 +92,8 @@ def read_output_and_stack(fnames, frame):
 
     # Drop Duplicate Indices
     # http://stackoverflow.com/questions/13035764/remove-rows-with-duplicate-indices-pandas-dataframe-and-timeseries
-    df.drop_duplicates(subset=["pid"], inplace=True)
+    if drop_duplicates:
+        df.drop_duplicates(subset=["pid"], inplace=True)
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
