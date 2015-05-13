@@ -23,5 +23,5 @@ def return_sources(pid, dfc):
             sources.append(int(dfc_loc.pidj))
         elif dfc_loc.pidj in sources:
             sources.append(int(dfc_loc.pidi))
-    sources = np.asarray(source, dtype=np.int64)
+    sources = np.asarray(sources, dtype=np.int64)
     return sources
