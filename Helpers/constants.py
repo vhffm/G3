@@ -17,6 +17,9 @@ mneptune = 1.02400e26 # kg
 mpluto   = 1.30900e22 # kg
 mmoon    = 7.34767e22 # kg
 
+# Cross-Section Areas
+Aearth = 6371.0 * np.pi**2.0 # km2
+
 # Angle Conversions
 r2d = 180.0 / np.pi
 d2r = np.pi / 180.0
