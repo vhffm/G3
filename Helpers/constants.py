@@ -21,7 +21,7 @@ mmoon    = 7.34767e22 # kg
 t0ss = -4.568 # Gyr
 
 # Cross-Section Areas
-Aearth = 6371.0 * np.pi**2.0 # km2
+Aearth = np.pi * 6371.0**2.0 # km2
 
 # Angle Conversions
 r2d = 180.0 / np.pi
