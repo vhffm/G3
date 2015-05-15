@@ -17,6 +17,9 @@ mneptune = 1.02400e26 # kg
 mpluto   = 1.30900e22 # kg
 mmoon    = 7.34767e22 # kg
 
+# Age of the Solar System
+t0ss = -4.568 # Gyr
+
 # Cross-Section Areas
 Aearth = 6371.0 * np.pi**2.0 # km2
 
