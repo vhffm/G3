@@ -22,6 +22,11 @@ t0ss = -4.568 # Gyr
 
 # Cross-Section Areas
 Aearth = np.pi * 6371.0**2.0 # km2
+Amoon  = np.pi * 1737.1**2.0 # km2
+
+# Surface Area
+Searth = 4.0 * np.pi * 6371.0**2.0 # km2
+Smoon  = 4.0 * np.pi * 1737.1**2.0 # km2
 
 # Angle Conversions
 r2d = 180.0 / np.pi
