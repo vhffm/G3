@@ -39,6 +39,9 @@ au2km = 149597871.0 # km
 G = 6.67384e-11      # m3/kg/s2
 G = G / 1000.0**3.0  # km3/kg/s2
 
+# Imperial Conversions
+mm2inch = 0.0393701  # inches
+
 # Convenience
 twopi = 2.0 * np.pi
 
