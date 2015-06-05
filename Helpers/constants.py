@@ -20,9 +20,13 @@ mmoon    = 7.34767e22 # kg
 # Age of the Solar System
 t0ss = -4.568 # Gyr
 
+# Radii
+Rearth = 6371.0 # km
+Rmoon  = 1737.1 # km
+
 # Cross-Section Areas
-Aearth = np.pi * 6371.0**2.0 # km2
-Amoon  = np.pi * 1737.1**2.0 # km2
+Aearth = np.pi * Rearth**2.0 # km2
+Amoon  = np.pi * Rmoon**2.0  # km2
 
 # Surface Area
 Searth = 4.0 * np.pi * 6371.0**2.0 # km2
