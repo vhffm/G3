@@ -1,5 +1,5 @@
 """
-Pandas Helpers. Mostly to read Genga files.
+I/O Helpers. Mostly to read Genga files.
 """
 
 import numpy as np
@@ -202,3 +202,64 @@ def read_ejections_and_stack(fnames):
 
     # Return
     return df
+
+
+# Read (a,e,i) Grids
+# Cf. http://localhost:9999/notebooks/HitnRun/Grid_AEI_Dev.ipynb
+def read_aei_grid(fname):
+
+    # Load Data
+    with open("%s" % fname, "r") as f:
+        lines = f.readlines()
+
+    #
+    # Determine Blocks
+    # Here, iendblock is the line after the last of the current block
+    #
+
+    iendblock = []
+    first_emptyline = True
+    for iline, line in enumerate(lines):
+        if line.strip() == "":
+            if first_emptyline:
+                iendblock.append(iline)
+                first_emptyline = False
+            else:
+                first_emptyline = True
+    iendblock = np.asarray(iendblock, dtype=np.int64)
+
+    #
+    # Extract Matrices
+    #
+
+    # Reconstruct Dimensions
+    Na = len(lines[iendblock[0]-1].strip().split(" "))
+    Ne = iendblock[0]
+    Ni = iendblock[2]-iendblock[1]-2
+
+    # (a,e) 
+    # All Time
+    ae_all = np.ones([Ne, Na], dtype=np.int64)*999
+    for iline, line in enumerate(lines[:iendblock[0]]):
+        ae_all[iline,:] = np.fromstring(line.strip(), sep=" ")
+
+    # (a,e) 
+    # Since Last Output
+    ae_last = np.ones([Ne, Na], dtype=np.int64)*999
+    for iline, line in enumerate(lines[iendblock[0]+2:iendblock[1]]):
+        ae_last[iline,:] = np.fromstring(line.strip(), sep=" ")
+      
+    # (a,i)
+    # All Time
+    ai_all = np.ones([Ni, Na], dtype=np.int64)*999
+    for iline, line in enumerate(lines[iendblock[1]+2:iendblock[2]]):
+        ai_all[iline,:] = np.fromstring(line.strip(), sep=" ")
+
+    # (a,i) 
+    # Since Last Output
+    ai_last = np.ones([Ni, Na], dtype=np.int64)*999
+    for iline, line in enumerate(lines[iendblock[2]+2:]):
+        ai_last[iline,:] = np.fromstring(line.strip(), sep=" ")
+
+    # Return
+    return ae_all, ae_last, ai_all, ai_last
