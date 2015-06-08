@@ -239,25 +239,25 @@ def read_aei_grid(fname):
 
     # (a,e) 
     # All Time
-    ae_all = np.ones([Ne, Na], dtype=np.int64)*999
+    ae_all = np.ones([Ne, Na], dtype=np.int64)*np.nan
     for iline, line in enumerate(lines[:iendblock[0]]):
         ae_all[iline,:] = np.fromstring(line.strip(), sep=" ")
 
     # (a,e) 
     # Since Last Output
-    ae_last = np.ones([Ne, Na], dtype=np.int64)*999
+    ae_last = np.ones([Ne, Na], dtype=np.int64)*np.nan
     for iline, line in enumerate(lines[iendblock[0]+2:iendblock[1]]):
         ae_last[iline,:] = np.fromstring(line.strip(), sep=" ")
       
     # (a,i)
     # All Time
-    ai_all = np.ones([Ni, Na], dtype=np.int64)*999
+    ai_all = np.ones([Ni, Na], dtype=np.int64)*np.nan
     for iline, line in enumerate(lines[iendblock[1]+2:iendblock[2]]):
         ai_all[iline,:] = np.fromstring(line.strip(), sep=" ")
 
     # (a,i) 
     # Since Last Output
-    ai_last = np.ones([Ni, Na], dtype=np.int64)*999
+    ai_last = np.ones([Ni, Na], dtype=np.int64)*np.nan
     for iline, line in enumerate(lines[iendblock[2]+2:]):
         ai_last[iline,:] = np.fromstring(line.strip(), sep=" ")
 
