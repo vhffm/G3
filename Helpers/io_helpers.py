@@ -206,6 +206,16 @@ def read_ejections_and_stack(fnames):
 
 # Read (a,e,i) Grids
 # Cf. http://localhost:9999/notebooks/HitnRun/Grid_AEI_Dev.ipynb
+#
+# Usage tips:
+#
+# ae_all[ae_all == 0] = np.nan
+#
+# fig, ax = plt.subplots(1,1)
+# ax.imshow(ae_all, \
+#           interpolation="None", cmap="Blues", origin="lower", \
+#           extent=(0, 10, 0, 1))
+# ax.set_aspect("auto")
 def read_aei_grid(fname):
 
     # Load Data
