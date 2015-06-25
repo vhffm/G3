@@ -40,6 +40,10 @@ d2r = np.pi / 180.0
 au2km = 149597871.0 # km
 kpc2m = 3.08567758e19 # m
 
+# CGS Conversions
+cm2kpc = 0.01 / kpc2m # kpc
+g2msun = 0.001 / msun # msun
+
 # True Constants
 G = 6.67384e-11      # m3/kg/s2
 G = G / 1000.0**3.0  # km3/kg/s2
