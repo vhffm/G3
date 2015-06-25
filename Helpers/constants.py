@@ -38,6 +38,7 @@ d2r = np.pi / 180.0
 
 # Distance Conversions
 au2km = 149597871.0 # km
+kpc2m = 3.08567758e19 # m
 
 # True Constants
 G = 6.67384e-11      # m3/kg/s2
