@@ -79,8 +79,14 @@ for nstep in nsteps:
                                               nstep, \
                                               df.time.iloc[0]), \
                  fontsize="x-small")
-    mtxt = "Most Massive Planets: (%.2f, %.2f, %.2f) M_Earth" % \
-        ( dfx.iloc[0].mass, dfx.iloc[1].mass, dfx.iloc[2].mass )
+    mtxt_tmp = ""
+    if len(dfx) >= 1:
+        mtxt_tmp += "%.2f" % dfx.iloc[0].mass
+    if len(dfx) >= 2:
+        mtxt_tmp += ", %.2f" % dfx.iloc[1].mass
+    if len(dfx) >= 3:
+        mtxt_tmp += ", %.2f" % dfx.iloc[2].mass
+    mtxt = "Most Massive Planets: (%s)" % mtxt_tmp
     ax.text(0.05, 0.95, \
             mtxt, \
             horizontalalignment='left', \
