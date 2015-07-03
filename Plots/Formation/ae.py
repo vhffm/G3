@@ -68,6 +68,7 @@ for nstep in nsteps:
                                                   nstep), \
                          frame="heliocentric")
     s = df.mass * m + n
+    dfx = df.sort(columns=["mass"], ascending=False).head(3)
 
     # Plot/Style
     ax.scatter(df.a, df.e, s=s**2.0, c="b", edgecolor="none", alpha=0.5)
@@ -76,6 +77,13 @@ for nstep in nsteps:
                                               nstep, \
                                               df.time.iloc[0]), \
                  fontsize="x-small")
+    mtxt = "Most Massive Planets: (%.2f, %.2f, %.2f) M_Earth" % \
+        ( dfx.iloc[0].mass, dfx.iloc[1].mass, dfx.iloc[2].mass )
+    ax.text(0.05, 0.95, \
+            mtxt, \
+            horizontalalignment='left', \
+            verticalalignment='top', \
+            transform=ax.transAxes)
     ax.set_xlim([0,5])
     ax.set_ylim([0,0.6])
     ax.set_xlabel("Semi-Major Axis (AU)")
