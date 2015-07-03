@@ -41,6 +41,7 @@ mmin = df["mass"].min()
 # mmax = np.zeros(2)
 # df = ioh.read_output("Out_%s_%012d.dat" % (args.run_name, nsteps[-1]), \
 #                      frame="heliocentric")
+# df = df[df.mass<16.0] 
 # mmax[0] = df["mass"].max()
 # del df
 
@@ -67,6 +68,7 @@ for nstep in nsteps:
                                                   args.run_name, \
                                                   nstep), \
                          frame="heliocentric")
+    df = df[df.mass<16.0]
     s = df.mass * m + n
     dfx = df.sort(columns=["mass"], ascending=False).head(3)
 
