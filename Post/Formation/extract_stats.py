@@ -19,50 +19,15 @@ import pandas as pd
 import io_helpers as ioh
 import constants as C
 
+###############################################################################
+# FUNCTION DEFINITIONS
+###############################################################################
 
-# Cutoff
-m_cutoff = 2.0e23 # kg
-m_cutoff /= C.mearth # earth masses
+def extract_stats(cdir):
+    """
+    Processing Function.
+    """
 
-# List of Directories
-if sys.stdin.isatty():
-    print "!! No Directory List (Use Stdin)."
-    sys.exit()
-else:
-    lines = sys.stdin.read().rstrip("\n").split("\n")
-    dirs = []
-    for line in lines:
-        dirs.append(line)
-    print "// Reading %i Directories" % len(dirs)
-
-# The Globbit
-run_names = []
-for idir, cdir in enumerate(dirs):
-    globs = glob.glob("%s/Out_*.dat" % cdir)
-    # Extract run names
-    # In:  Out_run_03_000057000000
-    # Out: run_03
-    run_names.append(globs[0].strip().split("/")[-1][:-4][4:-13])
-    # Extract directory w/ most outputs
-    if idir == 0:
-        lmax = len(globs)
-        xglobs = globs
-    else:
-        # Actual
-        if len(globs) > lmax:
-            lmax = len(globs)
-            xglobs = globs
-
-# Get steps
-nsteps = np.zeros_like(xglobs, dtype=np.int64)
-for iglob, xglob in enumerate(sorted(xglobs)):
-    # In : /some/dir/Out_run_03_000156000000.dat
-    # Out: 156000000
-    nsteps[iglob] = int(xglob.strip().split("/")[-1][:-4].split("_")[-1])
-
-# Loop directories
-df_sts_runs = {}
-for idir, cdir in enumerate(dirs):
     print "// Processing %s" % cdir
     
     # Allocate
@@ -113,8 +78,58 @@ for idir, cdir in enumerate(dirs):
     cols = [ 'time', \
              'mass_total', 'mass_above_cutoff', 'mass_below_cutoff', \
              'npart_total', 'npart_above_cutoff', 'npart_below_cutoff']
-    df_sts_tmp = pd.DataFrame(data, columns = cols)
-    df_sts_runs["%s" % run_names[idir]] = df_sts_tmp
+
+    # Return
+    return pd.DataFrame(data, columns = cols)
+
+###############################################################################
+# MAIN PROGRAM STARTS HERE
+###############################################################################
+
+# Cutoff
+m_cutoff = 2.0e23 # kg
+m_cutoff /= C.mearth # earth masses
+
+# List of Directories
+if sys.stdin.isatty():
+    print "!! No Directory List (Use Stdin)."
+    sys.exit()
+else:
+    lines = sys.stdin.read().rstrip("\n").split("\n")
+    dirs = []
+    for line in lines:
+        dirs.append(line)
+    print "// Reading %i Directories" % len(dirs)
+
+# The Globbit
+run_names = []
+for idir, cdir in enumerate(dirs):
+    globs = glob.glob("%s/Out_*.dat" % cdir)
+    # Extract run names
+    # In:  Out_run_03_000057000000
+    # Out: run_03
+    run_names.append(globs[0].strip().split("/")[-1][:-4][4:-13])
+    # Extract directory w/ most outputs
+    if idir == 0:
+        lmax = len(globs)
+        xglobs = globs
+    else:
+        # Actual
+        if len(globs) > lmax:
+            lmax = len(globs)
+            xglobs = globs
+
+# Get steps
+nsteps = np.zeros_like(xglobs, dtype=np.int64)
+for iglob, xglob in enumerate(sorted(xglobs)):
+    # In : /some/dir/Out_run_03_000156000000.dat
+    # Out: 156000000
+    nsteps[iglob] = int(xglob.strip().split("/")[-1][:-4].split("_")[-1])
+
+# Loop directories
+df_sts_runs = {}
+for idir, cdir in enumerate(dirs):
+    df_sts_runs["%s" % run_names[idir]] = extract_stats(cdir)
 
 # Panel
 wp = pd.Panel(df_sts_runs)
