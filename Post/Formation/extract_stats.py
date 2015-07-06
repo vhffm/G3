@@ -18,6 +18,8 @@ import numpy as np
 import pandas as pd
 import io_helpers as ioh
 import constants as C
+import multiprocessing as mp
+import argparse
 
 ###############################################################################
 # FUNCTION DEFINITIONS
@@ -92,6 +94,12 @@ def extract_stats(cdir):
 # MAIN PROGRAM STARTS HERE
 ###############################################################################
 
+# Parse Arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('-np', type=int, default=1, \
+                    help='Number of Processes')
+args = parser.parse_args()
+
 # Cutoff
 m_cutoff = 2.0e23 # kg
 m_cutoff /= C.mearth # earth masses
@@ -132,10 +140,18 @@ for iglob, xglob in enumerate(sorted(xglobs)):
     # Out: 156000000
     nsteps[iglob] = int(xglob.strip().split("/")[-1][:-4].split("_")[-1])
 
-# Loop directories
+# Loop directories. Serial or parallel.
 df_sts_runs = {}
-for idir, cdir in enumerate(dirs):
-    df_sts_runs["%s" % run_names[idir]] = extract_stats(cdir)
+if args.np == 1:
+    for idir, cdir in enumerate(dirs):
+        df_sts_runs["%s" % run_names[idir]] = extract_stats(cdir)
+else:
+    pool = mp.Pool(processes=args.np)
+    result = pool.map(extract_stats, dirs)
+    pool.close()
+    pool.join()
+    for idir, cdir in enumerate(dirs):
+        df_sts_runs["%s" % run_names[idir]] = result[idir]
 
 # Panel
 wp = pd.Panel(df_sts_runs)
