@@ -29,6 +29,12 @@ def extract_stats(cdir):
     """
 
     print "// Processing %s" % cdir
+
+    # Extract run name (again...)
+    # In:  Out_run_03_000057000000
+    # Out: run_03
+    globs = glob.glob("%s/Out_*.dat" % cdir)
+    run_name = globs[0].strip().split("/")[-1][:-4][4:-13]
     
     # Allocate
     time = np.ones_like(nsteps) * np.nan
@@ -46,7 +52,7 @@ def extract_stats(cdir):
         try:
             # Load output into dataframe.
             # Make sure to drop planets >12 Earth masses.
-            fname = "%s/Out_%s_%012d.dat" % (cdir, run_names[idir], nout)
+            fname = "%s/Out_%s_%012d.dat" % (cdir, run_name, nout)
             df_out_loc = ioh.read_output(fname, frame="heliocentric")
             df_out_loc = df_out_loc[df_out_loc.mass <= 12.0]
         
