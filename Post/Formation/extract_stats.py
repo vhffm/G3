@@ -156,7 +156,12 @@ else:
 # Panel
 wp = pd.Panel(df_sts_runs)
 
+# Compute Medians over Runs
+print "// Computing Medians"
+df_medians = wp.median(axis=0)
+
 # Save
 print "// Saving"
 with pd.HDFStore("Stats.hdf5", "w") as store:
     store['wp'] = wp
+    store['df_medians'] = df_medians
