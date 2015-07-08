@@ -555,7 +555,9 @@ dict_q75 = {}
 dict_q90 = {}
 dict_max = {}
 # @todo: Parallelize?
-for column in wp[wp.items[0]].columns.values:
+for icolumn, column in enumerate(wp[wp.items[0]].columns.values):
+    print "   Column %03d/%03d (%s)" % \
+        (icolumn+1, len(wp[wp.items[0]].columns.values), column)
     # wp[wp.items[0]] == wp["run_01"]
     # NB: wp (pandas panel) is organized as 
     #     - wp.items (run_01...run_xx)
