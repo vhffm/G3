@@ -30,6 +30,10 @@ def extract_stats(cdir):
     Processing Function.
     """
 
+    # Cutoff
+    m_cutoff = 2.0e23 # kg
+    m_cutoff /= C.mearth # earth masses
+
     print "// Processing %s" % cdir
 
     # Extract run name (again...)
@@ -109,10 +113,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-np', type=int, default=1, \
                     help='Number of Processes')
 args = parser.parse_args()
-
-# Cutoff
-m_cutoff = 2.0e23 # kg
-m_cutoff /= C.mearth # earth masses
 
 # List of Directories
 if sys.stdin.isatty():
