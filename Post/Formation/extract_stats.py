@@ -42,11 +42,17 @@ def extract_stats(cdir):
     globs = glob.glob("%s/Out_*.dat" % cdir)
     run_name = globs[0].strip().split("/")[-1][:-4][4:-13]
     
+    #
     # Allocate
+    #
     time = np.ones_like(nsteps) * np.nan
+
+    # Disk Mass
     disk_mass = np.ones_like(time) * np.nan
     disk_mass_above = np.ones_like(time) * np.nan
     disk_mass_below = np.ones_like(time) * np.nan
+
+    # Number of Particles
     npart = np.ones_like(time, dtype=np.int32) * np.nan
     npart_above = np.ones_like(time, dtype=np.int32) * np.nan
     npart_below = np.ones_like(time, dtype=np.int32) * np.nan
