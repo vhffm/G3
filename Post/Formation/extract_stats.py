@@ -40,12 +40,12 @@ def extract_stats(cdir):
     
     # Allocate
     time = np.ones_like(nsteps) * np.nan
-    mass_total = np.ones_like(time) * np.nan
-    mass_above_cutoff = np.ones_like(time) * np.nan
-    mass_below_cutoff = np.ones_like(time) * np.nan
-    npart_total = np.ones_like(time, dtype=np.int32) * np.nan
-    npart_above_cutoff = np.ones_like(time, dtype=np.int32) * np.nan
-    npart_below_cutoff = np.ones_like(time, dtype=np.int32) * np.nan
+    disk_mass = np.ones_like(time) * np.nan
+    disk_mass_above = np.ones_like(time) * np.nan
+    disk_mass_below = np.ones_like(time) * np.nan
+    npart = np.ones_like(time, dtype=np.int32) * np.nan
+    npart_above = np.ones_like(time, dtype=np.int32) * np.nan
+    npart_below = np.ones_like(time, dtype=np.int32) * np.nan
     
     # Loop all steps
     for iout, nout in enumerate(nsteps):
@@ -53,39 +53,49 @@ def extract_stats(cdir):
         # If we cannot load the output, we'll stick to NaN.
         try:
             # Load output into dataframe.
-            # Make sure to drop planets >12 Earth masses.
+            # Make sure to drop planets <= 12 Earth masses.
             fname = "%s/Out_%s_%012d.dat" % (cdir, run_name, nout)
-            df_out_loc = ioh.read_output(fname, frame="heliocentric")
-            df_out_loc = df_out_loc[df_out_loc.mass <= 12.0]
+            df = ioh.read_output(fname, frame="heliocentric")
+            df = df[df.mass <= 12.0]
+
+            # Cutoff
+            df_above = df[df.mass >= m_cutoff]
+            df_below = df[df.mass < m_cutoff]
         
-            # Compute statistics
-            time[iout] = df_out_loc.time.iloc[0]
-            mass_total[iout] = np.sum(df_out_loc.mass)
-            mass_above_cutoff[iout] = \
-                np.sum(df_out_loc[df_out_loc.mass >= m_cutoff].mass)
-            mass_below_cutoff[iout] = \
-                np.sum(df_out_loc[df_out_loc.mass < m_cutoff].mass)
-            npart_total[iout] = len(df_out_loc)
-            npart_above_cutoff[iout] = np.sum(df_out_loc.mass >= m_cutoff)
-            npart_below_cutoff[iout] = np.sum(df_out_loc.mass < m_cutoff)
+            #
+            # Compute Statistics
+            #
+            time[iout] = df.time.iloc[0]
+
+            # Disk Mass
+            disk_mass[iout] = np.sum(df.mass)
+            disk_mass_above[iout] = np.sum(df_above.mass)
+            disk_mass_below[iout] = np.sum(df_below.mass)
+
+            # Number of Particles
+            npart[iout] = len(df)
+            npart_above[iout] = len(df_above)
+            npart_below[iout] = len(df_below)
             
             # Clean up so we don't run out of memory from too many iterations
-            del df_out_loc
+            del df
+            del df_below
+            del df_above
             
         except:
             pass
         
     # Assemble dataframe panel
     data = { 'time': time, \
-             'mass_total': mass_total, \
-             'mass_above_cutoff': mass_above_cutoff, \
-             'mass_below_cutoff': mass_below_cutoff, \
-             'npart_total': npart_total, \
-             'npart_above_cutoff': npart_above_cutoff, \
-             'npart_below_cutoff': npart_below_cutoff }
+             'disk_mass': disk_mass, \
+             'disk_mass_above': disk_mass_above, \
+             'disk_mass_below': disk_mass_below, \
+             'npart': npart, \
+             'npart_above': npart_above, \
+             'npart_below': npart_below }
     cols = [ 'time', \
-             'mass_total', 'mass_above_cutoff', 'mass_below_cutoff', \
-             'npart_total', 'npart_above_cutoff', 'npart_below_cutoff']
+             'disk_mass', 'disk_mass_above', 'disk_mass_below', \
+             'npart', 'npart_above', 'npart_below']
 
     # Return
     return pd.DataFrame(data, columns = cols)
