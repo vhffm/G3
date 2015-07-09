@@ -20,6 +20,7 @@ import io_helpers as ioh
 import constants as C
 import multiprocessing as mp
 import argparse
+import weighted as wq
 
 ###############################################################################
 # FUNCTION DEFINITIONS
@@ -214,77 +215,77 @@ def extract_stats(cdir):
 
             # Semi-Major Axis
             p_a_min[iout] = df.a.min
-            p_a_q10[iout] = np.percentile(df.a, 10)
-            p_a_q25[iout] = np.percentile(df.a, 25)
-            p_a_q50[iout] = np.percentile(df.a, 50)
-            p_a_q75[iout] = np.percentile(df.a, 75)
-            p_a_q90[iout] = np.percentile(df.a, 90)
+            p_a_q10[iout] = wq.quantile_1D(df.a, df.mass, 0.10)
+            p_a_q25[iout] = wq.quantile_1D(df.a, df.mass, 0.25)
+            p_a_q50[iout] = wq.quantile_1D(df.a, df.mass, 0.50)
+            p_a_q75[iout] = wq.quantile_1D(df.a, df.mass, 0.75)
+            p_a_q90[iout] = wq.quantile_1D(df.a, df.mass, 0.90)
             p_a_max[iout] = df.a.max
 
             p_a_above_min[iout] = df_above.a.min
-            p_a_above_q10[iout] = np.percentile(df_above.a, 10)
-            p_a_above_q25[iout] = np.percentile(df_above.a, 25)
-            p_a_above_q50[iout] = np.percentile(df_above.a, 50)
-            p_a_above_q75[iout] = np.percentile(df_above.a, 75)
-            p_a_above_q90[iout] = np.percentile(df_above.a, 90)
+            p_a_above_q10[iout] = wq.quantile_1D(df_above.a, df_above.mass, 0.10)
+            p_a_above_q25[iout] = wq.quantile_1D(df_above.a, df_above.mass, 0.25)
+            p_a_above_q50[iout] = wq.quantile_1D(df_above.a, df_above.mass, 0.50)
+            p_a_above_q75[iout] = wq.quantile_1D(df_above.a, df_above.mass, 0.75)
+            p_a_above_q90[iout] = wq.quantile_1D(df_above.a, df_above.mass, 0.90)
             p_a_above_max[iout] = df_above.a.max
 
             p_a_below_min[iout] = df_below.a.min
-            p_a_below_q10[iout] = np.percentile(df_below.a, 10)
-            p_a_below_q25[iout] = np.percentile(df_below.a, 25)
-            p_a_below_q50[iout] = np.percentile(df_below.a, 50)
-            p_a_below_q75[iout] = np.percentile(df_below.a, 75)
-            p_a_below_q90[iout] = np.percentile(df_below.a, 90)
+            p_a_below_q10[iout] = wq.quantile_1D(df_below.a, df_below.mass, 0.10)
+            p_a_below_q25[iout] = wq.quantile_1D(df_below.a, df_below.mass, 0.25)
+            p_a_below_q50[iout] = wq.quantile_1D(df_below.a, df_below.mass, 0.50)
+            p_a_below_q75[iout] = wq.quantile_1D(df_below.a, df_below.mass, 0.75)
+            p_a_below_q90[iout] = wq.quantile_1D(df_below.a, df_below.mass, 0.90)
             p_a_below_max[iout] = df_below.a.max
 
             # Eccentricity
             p_e_min[iout] = df.e.min
-            p_e_q10[iout] = np.percentile(df.e, 10)
-            p_e_q25[iout] = np.percentile(df.e, 25)
-            p_e_q50[iout] = np.percentile(df.e, 50)
-            p_e_q75[iout] = np.percentile(df.e, 75)
-            p_e_q90[iout] = np.percentile(df.e, 90)
+            p_e_q10[iout] = wq.quantile_1D(df.e, df.mass, 0.10)
+            p_e_q25[iout] = wq.quantile_1D(df.e, df.mass, 0.25)
+            p_e_q50[iout] = wq.quantile_1D(df.e, df.mass, 0.50)
+            p_e_q75[iout] = wq.quantile_1D(df.e, df.mass, 0.75)
+            p_e_q90[iout] = wq.quantile_1D(df.e, df.mass, 0.90)
             p_e_max[iout] = df.e.max
 
             p_e_above_min[iout] = df_above.e.min
-            p_e_above_q10[iout] = np.percentile(df_above.e, 10)
-            p_e_above_q25[iout] = np.percentile(df_above.e, 25)
-            p_e_above_q50[iout] = np.percentile(df_above.e, 50)
-            p_e_above_q75[iout] = np.percentile(df_above.e, 75)
-            p_e_above_q90[iout] = np.percentile(df_above.e, 90)
+            p_e_above_q10[iout] = wq.quantile_1D(df_above.e, df_above.mass, 0.10)
+            p_e_above_q25[iout] = wq.quantile_1D(df_above.e, df_above.mass, 0.25)
+            p_e_above_q50[iout] = wq.quantile_1D(df_above.e, df_above.mass, 0.50)
+            p_e_above_q75[iout] = wq.quantile_1D(df_above.e, df_above.mass, 0.75)
+            p_e_above_q90[iout] = wq.quantile_1D(df_above.e, df_above.mass, 0.90)
             p_e_above_max[iout] = df_above.e.max
 
             p_e_below_min[iout] = df_below.e.min
-            p_e_below_q10[iout] = np.percentile(df_below.e, 10)
-            p_e_below_q25[iout] = np.percentile(df_below.e, 25)
-            p_e_below_q50[iout] = np.percentile(df_below.e, 50)
-            p_e_below_q75[iout] = np.percentile(df_below.e, 75)
-            p_e_below_q90[iout] = np.percentile(df_below.e, 90)
+            p_e_below_q10[iout] = wq.quantile_1D(df_below.e, df_below.mass, 0.10)
+            p_e_below_q25[iout] = wq.quantile_1D(df_below.e, df_below.mass, 0.25)
+            p_e_below_q50[iout] = wq.quantile_1D(df_below.e, df_below.mass, 0.50)
+            p_e_below_q75[iout] = wq.quantile_1D(df_below.e, df_below.mass, 0.75)
+            p_e_below_q90[iout] = wq.quantile_1D(df_below.e, df_below.mass, 0.90)
             p_e_below_max[iout] = df_below.e.max
 
             # Inclination
             p_i_min[iout] = df.i.min
-            p_i_q10[iout] = np.percentile(df.i, 10)
-            p_i_q25[iout] = np.percentile(df.i, 25)
-            p_i_q50[iout] = np.percentile(df.i, 50)
-            p_i_q75[iout] = np.percentile(df.i, 75)
-            p_i_q90[iout] = np.percentile(df.i, 90)
+            p_i_q10[iout] = wq.quantile_1D(df.i, df.mass, 0.10)
+            p_i_q25[iout] = wq.quantile_1D(df.i, df.mass, 0.25)
+            p_i_q50[iout] = wq.quantile_1D(df.i, df.mass, 0.50)
+            p_i_q75[iout] = wq.quantile_1D(df.i, df.mass, 0.75)
+            p_i_q90[iout] = wq.quantile_1D(df.i, df.mass, 0.90)
             p_i_max[iout] = df.i.max
 
             p_i_above_min[iout] = df_above.i.min
-            p_i_above_q10[iout] = np.percentile(df_above.i, 10)
-            p_i_above_q25[iout] = np.percentile(df_above.i, 25)
-            p_i_above_q50[iout] = np.percentile(df_above.i, 50)
-            p_i_above_q75[iout] = np.percentile(df_above.i, 75)
-            p_i_above_q90[iout] = np.percentile(df_above.i, 90)
+            p_i_above_q10[iout] = wq.quantile_1D(df_above.i, df_above.mass, 0.10)
+            p_i_above_q25[iout] = wq.quantile_1D(df_above.i, df_above.mass, 0.25)
+            p_i_above_q50[iout] = wq.quantile_1D(df_above.i, df_above.mass, 0.50)
+            p_i_above_q75[iout] = wq.quantile_1D(df_above.i, df_above.mass, 0.75)
+            p_i_above_q90[iout] = wq.quantile_1D(df_above.i, df_above.mass, 0.90)
             p_i_above_max[iout] = df_above.i.max
 
             p_i_below_min[iout] = df_below.i.min
-            p_i_below_q10[iout] = np.percentile(df_below.i, 10)
-            p_i_below_q25[iout] = np.percentile(df_below.i, 25)
-            p_i_below_q50[iout] = np.percentile(df_below.i, 50)
-            p_i_below_q75[iout] = np.percentile(df_below.i, 75)
-            p_i_below_q90[iout] = np.percentile(df_below.i, 90)
+            p_i_below_q10[iout] = wq.quantile_1D(df_below.i, df_below.mass, 0.10)
+            p_i_below_q25[iout] = wq.quantile_1D(df_below.i, df_below.mass, 0.25)
+            p_i_below_q50[iout] = wq.quantile_1D(df_below.i, df_below.mass, 0.50)
+            p_i_below_q75[iout] = wq.quantile_1D(df_below.i, df_below.mass, 0.75)
+            p_i_below_q90[iout] = wq.quantile_1D(df_below.i, df_below.mass, 0.90)
             p_i_below_max[iout] = df_below.i.max
             
             # Clean up so we don't run out of memory from too many iterations
