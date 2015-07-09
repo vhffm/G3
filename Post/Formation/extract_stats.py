@@ -541,10 +541,6 @@ else:
 # Panel
 wp = pd.Panel(df_sts_runs)
 
-# Compute Medians over Runs
-print "// Computing Medians"
-df_medians = wp.median(axis=0)
-
 # Compute Various Quantiles
 print "// Computing Quantiles"
 dict_min = {}
@@ -585,7 +581,6 @@ df_max = pd.DataFrame(dict_max, columns=wp[wp.items[0]].columns.values)
 print "// Saving"
 with pd.HDFStore("Stats.hdf5", "w") as store:
     store['wp'] = wp
-    store['df_medians'] = df_medians
     store['df_min'] = df_min
     store['df_q10'] = df_q10
     store['df_q25'] = df_q25
