@@ -409,15 +409,15 @@ for istep, nstep in enumerate(nsteps):
     a_below_std[istep] = df_below.a.std()
 
     # Eccentricity
-    e_below_q10[istep] = wq.quantile_1D(df_below.a, df_below.mass, 0.10)
-    e_below_q25[istep] = wq.quantile_1D(df_below.a, df_below.mass, 0.25)
-    e_below_q50[istep] = wq.quantile_1D(df_below.a, df_below.mass, 0.50)
-    e_below_q75[istep] = wq.quantile_1D(df_below.a, df_below.mass, 0.75)
-    e_below_q90[istep] = wq.quantile_1D(df_below.a, df_below.mass, 0.90) 
-    e_below_min[istep] = df_below.a.min()
-    e_below_max[istep] = df_below.a.max()
-    e_below_avg[istep] = df_below.a.mean()
-    e_below_std[istep] = df_below.a.std()
+    e_below_q10[istep] = wq.quantile_1D(df_below.e, df_below.mass, 0.10)
+    e_below_q25[istep] = wq.quantile_1D(df_below.e, df_below.mass, 0.25)
+    e_below_q50[istep] = wq.quantile_1D(df_below.e, df_below.mass, 0.50)
+    e_below_q75[istep] = wq.quantile_1D(df_below.e, df_below.mass, 0.75)
+    e_below_q90[istep] = wq.quantile_1D(df_below.e, df_below.mass, 0.90) 
+    e_below_min[istep] = df_below.e.min()
+    e_below_max[istep] = df_below.e.max()
+    e_below_avg[istep] = df_below.e.mean()
+    e_below_std[istep] = df_below.e.std()
 
     # Inclination
     i_below_q10[istep] = wq.quantile_1D(df_below.i, df_below.mass, 0.10)
