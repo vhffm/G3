@@ -291,11 +291,11 @@ for istep, nstep in enumerate(nsteps):
     ###########################################################################
 
     # Mass
-    mass_q10[istep] = np.percentile(df.mass, 10)
-    mass_q25[istep] = np.percentile(df.mass, 25)
-    mass_q50[istep] = np.percentile(df.mass, 50)
-    mass_q75[istep] = np.percentile(df.mass, 75)
-    mass_q90[istep] = np.percentile(df.mass, 90)
+    mass_q10[istep] = wq.quantile_1D(df.mass, df.mass, 0.10)
+    mass_q25[istep] = wq.quantile_1D(df.mass, df.mass, 0.25)
+    mass_q50[istep] = wq.quantile_1D(df.mass, df.mass, 0.50)
+    mass_q75[istep] = wq.quantile_1D(df.mass, df.mass, 0.75)
+    mass_q90[istep] = wq.quantile_1D(df.mass, df.mass, 0.90)
     mass_min[istep] = df.mass.min()
     mass_max[istep] = df.mass.max()
     mass_avg[istep] = df.mass.mean()
@@ -339,11 +339,11 @@ for istep, nstep in enumerate(nsteps):
     ###########################################################################
 
     # Mass
-    mass_above_q10[istep] = np.percentile(df_above.mass, 10)
-    mass_above_q25[istep] = np.percentile(df_above.mass, 25)
-    mass_above_q50[istep] = np.percentile(df_above.mass, 50)
-    mass_above_q75[istep] = np.percentile(df_above.mass, 75)
-    mass_above_q90[istep] = np.percentile(df_above.mass, 90)
+    mass_above_q10[istep] = wq.quantile_1D(df_above.mass, df_above.mass, 0.10)
+    mass_above_q25[istep] = wq.quantile_1D(df_above.mass, df_above.mass, 0.25)
+    mass_above_q50[istep] = wq.quantile_1D(df_above.mass, df_above.mass, 0.50)
+    mass_above_q75[istep] = wq.quantile_1D(df_above.mass, df_above.mass, 0.75)
+    mass_above_q90[istep] = wq.quantile_1D(df_above.mass, df_above.mass, 0.90)
     mass_above_min[istep] = df_above.mass.min()
     mass_above_max[istep] = df_above.mass.max()
     mass_above_avg[istep] = df_above.mass.mean()
@@ -387,11 +387,11 @@ for istep, nstep in enumerate(nsteps):
     ###########################################################################
 
     # Mass
-    mass_below_q10[istep] = np.percentile(df_below.mass, 10)
-    mass_below_q25[istep] = np.percentile(df_below.mass, 25)
-    mass_below_q50[istep] = np.percentile(df_below.mass, 50)
-    mass_below_q75[istep] = np.percentile(df_below.mass, 75)
-    mass_below_q90[istep] = np.percentile(df_below.mass, 90)
+    mass_below_q10[istep] = wq.quantile_1D(df_below.mass, df_below.mass, 0.10)
+    mass_below_q25[istep] = wq.quantile_1D(df_below.mass, df_below.mass, 0.25)
+    mass_below_q50[istep] = wq.quantile_1D(df_below.mass, df_below.mass, 0.50)
+    mass_below_q75[istep] = wq.quantile_1D(df_below.mass, df_below.mass, 0.75)
+    mass_below_q90[istep] = wq.quantile_1D(df_below.mass, df_below.mass, 0.90)
     mass_below_min[istep] = df_below.mass.min()
     mass_below_max[istep] = df_below.mass.max()
     mass_below_avg[istep] = df_below.mass.mean()
