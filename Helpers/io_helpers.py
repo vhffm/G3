@@ -149,9 +149,9 @@ def read_collisions_and_stack(fnames, return_xyz=False):
                               header=None, names=names_cols, \
                               dtype=types_cols, \
                               usecols=touse_cols)
-            df = df.append(dfx, ignore_index=True)
             dfx['ifname'] = \
                 pd.DataFrame({'ifname': np.ones(len(dfx)) * ifname})
+            df = df.append(dfx, ignore_index=True)
         except IOError:
             raise Exception("File Not Found: %s" % fname)
 
