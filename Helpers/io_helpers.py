@@ -142,7 +142,7 @@ def read_collisions_and_stack(fnames, return_xyz=False):
 
     # Load CSV
     df = pd.DataFrame()
-    for fname in fnames:
+    for ifname, fname in enumerate(fnames):
         try:
             dfx = pd.read_csv(fname, \
                               sep=" ", \
@@ -150,6 +150,8 @@ def read_collisions_and_stack(fnames, return_xyz=False):
                               dtype=types_cols, \
                               usecols=touse_cols)
             df = df.append(dfx, ignore_index=True)
+            dfx['ifname'] = \
+                pd.DataFrame({'ifname': np.ones(len(dfx)) * ifname})
         except IOError:
             raise Exception("File Not Found: %s" % fname)
 
