@@ -195,8 +195,15 @@ def read_ejections_and_stack(fnames):
                               dtype=types_cols, \
                               usecols=touse_cols)
             df = df.append(dfx, ignore_index=True)
+            if len(dfx) > 0:
+                df = df.append(dfx, ignore_index=True)
         except IOError:
             raise Exception("File Not Found: %s" % fname)
+
+    # Empty?
+    if len(df) == 0:
+        df = pd.DataFrame({'time': [], \
+                           'pid': [], 'm': [], 'case': []})
 
     # Fix Mass
     df.m *= C.msun/C.mearth
