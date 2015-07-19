@@ -80,13 +80,15 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
 
     # Load CSV
     df = pd.DataFrame()
-    for fname in fnames:
+    for ifname, fname in enumerate(fnames):
         try:
             dfx = pd.read_csv(fname, \
                               sep=" ", \
                               header=None, \
                               names=names_cols, dtype=types_cols, \
                               usecols=touse_cols)
+            dfx['ifname'] = \
+                pd.DataFrame({'ifname': np.ones(len(dfx)) * ifname})
             df = df.append(dfx)
         except IOError:
             if not nofail:
@@ -187,14 +189,15 @@ def read_ejections_and_stack(fnames):
 
     # Load CSV
     df = pd.DataFrame()
-    for fname in fnames:
+    for ifname, fname in enumerate(fnames):
         try:
             dfx = pd.read_csv(fname, \
                               sep=" ", \
                               header=None, names=names_cols, \
                               dtype=types_cols, \
                               usecols=touse_cols)
-            df = df.append(dfx, ignore_index=True)
+            dfx['ifname'] = \
+                pd.DataFrame({'ifname': np.ones(len(dfx)) * ifname})
             if len(dfx) > 0:
                 df = df.append(dfx, ignore_index=True)
         except IOError:
@@ -203,7 +206,8 @@ def read_ejections_and_stack(fnames):
     # Empty?
     if len(df) == 0:
         df = pd.DataFrame({'time': [], \
-                           'pid': [], 'm': [], 'case': []})
+                           'pid': [], 'm': [], 'case': [], \
+                           'ifname': []})
 
     # Fix Mass
     df.m *= C.msun/C.mearth
