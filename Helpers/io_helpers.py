@@ -97,7 +97,10 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
     # Drop Duplicate Indices
     # http://stackoverflow.com/questions/13035764/remove-rows-with-duplicate-indices-pandas-dataframe-and-timeseries
     if drop_duplicates:
-        df.drop_duplicates(subset=["pid"], inplace=True)
+        df.drop_duplicates(subset=["pid", "time"], inplace=True)
+
+    # Reindex (Relevant if we load multiple snapshots into one file)
+    df.reset_index(drop=True, inplace=True)
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
