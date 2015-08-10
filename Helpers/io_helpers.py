@@ -89,6 +89,7 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
                               usecols=touse_cols)
             dfx['ifname'] = \
                 pd.DataFrame({'ifname': np.ones(len(dfx)) * ifname})
+            dfx['nstep'] = int(fname.split('/')[-1][:-4].split('_')[-1])
             df = df.append(dfx)
         except IOError:
             if not nofail:
@@ -97,7 +98,7 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
     # Drop Duplicate Indices
     # http://stackoverflow.com/questions/13035764/remove-rows-with-duplicate-indices-pandas-dataframe-and-timeseries
     if drop_duplicates:
-        df.drop_duplicates(subset=["pid", "time"], inplace=True)
+        df.drop_duplicates(subset=["pid", "time", "nstep"], inplace=True)
 
     # Reindex (Relevant if we load multiple snapshots into one file)
     df.reset_index(drop=True, inplace=True)
