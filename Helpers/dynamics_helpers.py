@@ -62,6 +62,7 @@ def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
     @return: vx1_all, vy1_all, vz1_all - Body 1 Vel. Time Series [NP Float Arr]
     @return: x2_all, y2_all, z2_all    - Body 2 Pos. Time Series [NP Float Arr]
     @return: vx2_all, vy2_all, vz2_all - Body 2 Vel. Time Series [NP Float Arr]
+    @return: terminate                 - Terminated at Boundary? [Boolean]
     """
     
     # Output Arrays - Position
@@ -135,5 +136,6 @@ def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
         
     # Return
     return x1_all, y1_all, z1_all, vx1_all, vy1_all, vz1_all, \
-        x2_all, y2_all, z2_all, vx2_all, vy2_all, vz2_all
+        x2_all, y2_all, z2_all, vx2_all, vy2_all, vz2_all, \
+        terminate
     
