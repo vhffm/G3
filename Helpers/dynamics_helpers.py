@@ -44,9 +44,9 @@ def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
 
     The intergration proceeds for "nsteps" steps or until the distance 
     between the objects is
-    - (a) in between "dmin" and "dmax" (if both are passed)
-    - (b) is larger than "dmin" (if only dmin is passed)
-    - (c) is smaller than "dmax" (if only dmax is passed)
+    - (a) in between "dlo" and "dhi" (if both are passed)
+    - (b) is larger than "dlo" (if only dlo is passed)
+    - (c) is smaller than "dhi" (if only dhi is passed)
 
     @param: x1, y1, z1    - Body 1 Positions  [Numpy Floats]
     @param: vx1, vy1, vz1 - Body 1 Velocities [Numpy Floats]
