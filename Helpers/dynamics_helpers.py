@@ -74,8 +74,8 @@ def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
         # Distance
         dd = (x1-x2)**2.0 + (y1-y2)**2.0 + (z1-z2)**2.0
         
-        if nstep == 0:
-            print np.sqrt(dd)
+        # if nstep == 0:
+        #     print np.sqrt(dd)
 
         # Forces
         fff = - G * m1 * m2 / dd
@@ -115,7 +115,7 @@ def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
         # Terminate?
         if dmax:
             if np.sqrt(dd) > dmax:
-                print "Terminated @ d/dmax = %.2e" % (np.sqrt(dd)/dmax)
+                # print "Terminated @ d/dmax = %.2e" % (np.sqrt(dd)/dmax)
                 break
         
     # Return
