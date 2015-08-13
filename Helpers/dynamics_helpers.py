@@ -38,12 +38,15 @@ def euler_step_3d(x, y, z, vx, vy, vz, ax, ay, az, dt):
 
 def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
                         x2, y2, z2, vx2, vy2, vz2, \
-                        m1, m2, dt, nsteps, G=1.0, dmax=None):
+                        m1, m2, dt, nsteps, G=1.0, dlo=None, dhi=None):
     """
     Integrate two gravitationally interacting masses.
 
-    The intergration proceeds for "nsteps" steps  or until the distance 
-    between the objects exceeds "dmax".
+    The intergration proceeds for "nsteps" steps or until the distance 
+    between the objects is
+    - (a) in between "dmin" and "dmax" (if both are passed)
+    - (b) is larger than "dmin" (if only dmin is passed)
+    - (c) is smaller than "dmax" (if only dmax is passed)
 
     @param: x1, y1, z1    - Body 1 Positions  [Numpy Floats]
     @param: vx1, vy1, vz1 - Body 1 Velocities [Numpy Floats]
@@ -52,7 +55,8 @@ def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
     @param: m1, m2        - Masses [Numpy Floats]
     @param: dt            - Time Step [Numpy Float]
     @param: G=1.0         - Gravitational Constant [Numpy Float]
-    @param: dma=None      - Maximum Allowed Separation [Numpy Float]
+    @param: dhi=None      - Maximum Allowed Separation [Numpy Float]
+    @param: dlo=None      - Minimum Allowed Separation [Numpy Float]
 
     @return: x1_all, y1_all, z1_all    - Body 1 Pos. Time Series [NP Float Arr]
     @return: vx1_all, vy1_all, vz1_all - Body 1 Vel. Time Series [NP Float Arr]
@@ -113,10 +117,21 @@ def integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
         vz2_all.append(vz2)
         
         # Terminate?
-        if dmax:
-            if np.sqrt(dd) > dmax:
-                # print "Terminated @ d/dmax = %.2e" % (np.sqrt(dd)/dmax)
-                break
+        terminate = False
+        if (dlo) and (not dhi) and (np.sqrt(dd) > dlo):
+            terminate = True
+        if (dhi) and (not dlo) and (np.sqrt(dd) < dhi):
+            terminate = True
+        if (dlo) and (dhi) and (np.sqrt(dd) > dlo) and (np.sqrt(dd) < dhi):
+            terminate = True
+        if terminate:
+            # print "Terminated @ d/dlo, d/dhi = %.4f, %.4f" % \
+            #     (np.sqrt(dd)/dlo, np.sqrt(dd)/dhi)
+            break
+            
+    # Throw Notify
+    # if not terminate:
+    #     print "Failed To Reach Boundary"
         
     # Return
     return x1_all, y1_all, z1_all, vx1_all, vy1_all, vz1_all, \
