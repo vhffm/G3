@@ -7,6 +7,8 @@ import pandas as pd
 import kepler_helpers as kh
 import constants as C
 import vector_helpers as vh
+import collision_helpers as ch
+import time
 
 # Single Genga Output
 def read_output(fname, frame):
@@ -128,7 +130,7 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
 
 # Stack Collision Files For Multiple Genga Outputs
 # fnames = [ fname01, fname02, ... ]
-def read_collisions_and_stack(fnames, return_xyz=False):
+def read_collisions_and_stack(fnames, return_xyz=False, return_geometry=False):
     names_cols = [ "time", \
                    "pidi", "mi", "ri", \
                    "xi", "yi", "zi", \
@@ -138,6 +140,9 @@ def read_collisions_and_stack(fnames, return_xyz=False):
                    "xj", "yj", "zj", \
                    "vxj", "vyj", "vzj", \
                    "Sxj", "Syj", "Szj", "X" ]
+    # Dependency
+    if return_geometry:
+        return_xyz = True
     if return_xyz:
         touse_cols = [ 0, \
                        1, 2, 3, \
@@ -186,6 +191,20 @@ def read_collisions_and_stack(fnames, return_xyz=False):
         df["phi"] = vh.compute_angle(df.vxi, df.vyi, df.vzi, \
                                      df.vxj, df.vyj, df.vzj)
         df["phi"] *= C.r2d
+
+    # Compute Impact Geometry. Requires Numerical Integrations. Patience!
+    if return_geometry:
+        time_start = time.clock()
+        theta, b_over_r = ch.reconstruct_geometries(df)
+        time_end = time.clock()
+        time_elapsed = time_end - time_start
+        print "** Computed %i collision geometries in %.2f seconds." % \
+            (len(df), time_elapsed)
+        if np.sum(np.isnan(theta)) > 0:
+            print "!! Collision geometries undetermined: %i." % \
+                np.sum(np.isnan(theta))
+        df["theta"] = theta
+        df["b_over_r"] = b_over_r
 
     # Return
     return df
