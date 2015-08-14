@@ -42,6 +42,26 @@ def reconstruct_geometries(dfc):
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     #
 
+    # Compute Relative Position
+    dfc['dx'] = dfc.xj - dfc.xi
+    dfc['dy'] = dfc.yj - dfc.yi
+    dfc['dz'] = dfc.zj - dfc.zi
+    dfc['distance'] = np.sqrt(dfc['dx']**2.0 + \
+                              dfc['dy']**2.0 + \
+                              dfc['dz']**2.0)/(dfc.ri+dfc.rj)
+
+    # Compute Relative Velocity
+    dfc['dvx'] = dfc.vxi - dfc.vxj
+    dfc['dvy'] = dfc.vyi - dfc.vyj
+    dfc['dvz'] = dfc.vzi - dfc.vzj
+
+    # Fix Units
+    dfc['dx'] *= C.au2km
+    dfc['dy'] *= C.au2km
+    dfc['dz'] *= C.au2km
+    dfc['ri'] *= C.au2km
+    dfc['rj'] *= C.au2km
+
     theta_all = np.ones(len(dfc)) * np.nan
     b_over_r_all = np.ones(len(dfc)) * np.nan
     for ii, [index, dfc_loc] in enumerate(dfc.iterrows()):
