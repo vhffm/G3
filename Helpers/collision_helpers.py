@@ -94,15 +94,15 @@ def reconstruct_geometries(dfc):
         m1 = dfc_loc.mi * C.mearth
         m2 = m1/1.0e6
 
-        # Radius
+        # Radius (km)
         r1 = dfc_loc.ri
         r2 = dfc_loc.rj
 
-        # Cutoff Distance
+        # Cutoff Distance (km)
         dlo = 0.99*(r1+r2)
         dhi = 1.01*(r1+r2)
 
-        # Estimate Time to Impacts, Determine Steps
+        # Estimate Time to Impacts (s), Determine Steps (-)
         dd = np.sqrt(x2**2.0 + y2**2.0 + z2**2.0)
         vv = np.sqrt(vx2**2.0 + vy2**2.0 + vz2**2.0)
         tt = dd/vv
