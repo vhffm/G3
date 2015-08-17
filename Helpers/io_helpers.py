@@ -195,7 +195,7 @@ def read_collisions_and_stack(fnames, return_xyz=False, return_geometry=False):
     # Compute Impact Geometry. Requires Numerical Integrations. Patience!
     if return_geometry:
         time_start = time.clock()
-        theta, b_over_r = ch.reconstruct_geometries(df)
+        theta, b_over_r, v_impact = ch.reconstruct_geometries(df)
         time_end = time.clock()
         time_elapsed = time_end - time_start
         print "** Computed %i collision geometries in %.2f seconds." % \
@@ -205,6 +205,7 @@ def read_collisions_and_stack(fnames, return_xyz=False, return_geometry=False):
                 np.sum(np.isnan(theta))
         df["theta"] = theta
         df["b_over_r"] = b_over_r
+        df["v_impact"] = v_impact
 
     # Return
     return df

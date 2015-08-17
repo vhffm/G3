@@ -64,6 +64,7 @@ def reconstruct_geometries(dfc):
 
     theta_all = np.ones(len(dfc)) * np.nan
     b_over_r_all = np.ones(len(dfc)) * np.nan
+    v_impact_all = np.ones(len(dfc)) * np.nan   
     for ii, [index, dfc_loc] in enumerate(dfc.iterrows()):
 
         # Debug. Only do one row.
@@ -120,6 +121,9 @@ def reconstruct_geometries(dfc):
         # Only if the integration managed to put the body on the boundary.
         if terminated:
 
+            # Impact Velocity (km/s)
+            v_impact = np.sqrt(vx[-1]**2.0 + vy[-1]**2.0 + vz[-1]**2.0)
+
             # Extract Geometry
             theta, cos_theta, sin_theta = \
                 vh.compute_angle(np.atleast_1d(x[-1]), \
@@ -142,6 +146,7 @@ def reconstruct_geometries(dfc):
             # Add to Master
             theta_all[ii] = theta * C.r2d
             b_over_r_all[ii] = b/(r1+r2)
+            v_impact_all[ii] = v_impact
 
     # Return
-    return theta_all, b_over_r_all
+    return theta_all, b_over_r_all, v_impact_all
