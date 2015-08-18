@@ -10,7 +10,6 @@ import matplotlib as mpl; mpl.use('agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import constants as C
-import brewer2mpl as b2m
 from glob import glob
 import pandas as pd
 import os
@@ -33,7 +32,7 @@ mpl.rcParams['axes.titlesize']   = 'small'
 mpl.rcParams['font.size']        = 10
 
 # Load Colors
-c3 = b2m.get_map('Dark2', 'Qualitative', 3)
+from palettable.colorbrewer.qualitative import Dark2_3 as c3
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
