@@ -212,15 +212,21 @@ def read_collisions_and_stack(fnames, return_xyz=False, return_geometry=False):
 
 # Stack Ejection Files For Multiple Genga Outputs
 # fnames = [ fname01, fname02, ... ]
-def read_ejections_and_stack(fnames):
+def read_ejections_and_stack(fnames, return_xyz=False):
     names_cols = [ "time", \
                    "pid", "m", "r", \
                    "x", "y", "z", \
                    "vx", "vy", "vz", \
                    "Sx", "Sy", "Sz", \
                    "case" ]
-    # touse_cols = [ 0, 1, 2, 4, 5, 6, 7, 8, 9, 13 ]
-    touse_cols = [ 0, 1, 2, 13 ]
+    if return_xyz:
+        touse_cols = [ 0, \
+                       1, 2, 3, \
+                       4, 5, 6, \
+                       7, 8, 9, \
+                       13 ]
+    else:
+        touse_cols = [ 0, 1, 2, 13 ]
     types_cols = { "pid": np.int32, "case": np.int32 }
 
     # Load CSV
