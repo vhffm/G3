@@ -7,9 +7,7 @@ Helpers for Solar System Resonances.
 """
 
 import numpy as np
-import gas_helpers as gh
 import constants as C
-import scipy.integrate as sp_integrate
 import potential_helpers as ph
 
 
