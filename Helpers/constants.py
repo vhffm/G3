@@ -48,6 +48,9 @@ g2msun = 0.001 / msun # msun
 G = 6.67384e-11      # m3/kg/s2
 G = G / 1000.0**3.0  # km3/kg/s2
 
+# CGS Units
+G_cgs = 6.67384e-8   # cm3/g/s2
+
 # Imperial Conversions
 mm2inch = 0.0393701  # inches
 

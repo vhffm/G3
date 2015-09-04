@@ -7,6 +7,10 @@ Helpers for Solar System Resonances.
 """
 
 import numpy as np
+import gas_helpers as gh
+import constants as C
+import scipy.integrate as sp_integrate
+import potential_helpers as ph
 
 
 def laplace_coefficient(s, j, alpha):
@@ -295,6 +299,68 @@ def secular_frequencies_planets(a_1, a_2, m_1, m_2):
     return g_1, g_2, f_1, f_2
 
 
+def secular_frequencies_planets_gas(a_1, a_2, m_1, m_2, t_over_tau):
+    """
+    Compute secular frequencies g_{1,2} and f_{1,2} for a two planet system.
+
+    g_{1,2}: Perigree (omega) precession frequencies, eccentricity pumping.
+    f_{1,2}: Line of nodes (Omega) precession frequencies, inclination pumping.
+
+    *** !!! ***
+    This is linear theory. Higher order expansions give (a,e,i) dependence.
+    *** !!! ***
+
+    Cf. Murray & Dermott (1999), Sect. 7.3, Pages 270, 280, 281
+        http://adsabs.harvard.edu/abs/1999ssd..book.....M
+    Cf. Nagasawa (2000), Sect. 2.1, Appendix
+        http://adsabs.harvard.edu/abs/2000AJ....119.1480N
+
+    @param: a_1, a_2 - Planet Semi-Major Axis of Planets (AU)
+    @param: m_1, m_2 - Planet Masses (Solar Masses)
+    @param: t_over_tau - Exponential Decay Factor for Gas Density (-)
+    @returns: g_1, g_2 - Perigee Precession Rate (Rad/Second)
+    @returns: f_1, f_2 - Line of Nodes Precession Rate (Rad/Second)
+    """
+
+    # Gas Terms (Internal CGS Conversion - Needs AU!)
+    S_1, T_1 = ph.s_and_t(a_1, t_over_tau)
+    S_2, T_2 = ph.s_and_t(a_2, t_over_tau)
+
+    # CGS 
+    G = C.G_cgs; Msun = C.msun * 1000.0
+    m_1 *= Msun
+    m_2 *= Msun
+    a_1 *= C.au2km * 1000.0 * 100.0
+    a_2 *= C.au2km * 1000.0 * 100.0
+
+    # What are these called?
+    P_12 = a_1 / 8.0 / a_2**2.0 * laplace_coefficient(1.5, 2, a_1 / a_2)
+    N_12 = a_1 / 8.0 / a_2**2.0 * laplace_coefficient(1.5, 1, a_1 / a_2)
+
+    # Mean Motion
+    n_1 = np.sqrt(G * (Msun + m_1) / a_1**3.0)
+    n_2 = np.sqrt(G * (Msun + m_2) / a_2**3.0)
+
+    # Matrix Elements
+    A_11 = 2.0 / n_1 / a_1**2.0 * ( G * m_2 * N_12 + T_1 )
+    A_22 = 2.0 / n_2 / a_2**2.0 * ( G * m_1 * N_12 + T_2 )
+    A_12 = - 2.0 * G * P_12 / a_1 / a_2 * np.sqrt( m_1 * m_2 / n_1 / n_2 )
+
+    B_11 = - 2.0 / n_1 / a_1**2.0 * ( G * m_2 * N_12 + S_1 )
+    B_22 = - 2.0 / n_2 / a_2**2.0 * ( G * m_1 * N_12 + S_2 )
+    B_12 = - 2.0 * G * N_12 / a_1 / a_2 * np.sqrt( m_1 * m_2 / n_1 / n_2 )
+
+    # Frequencies (Rad/Second) = Eigenvalues of Matrices A and B
+    # Conversion: Multiply (C.r2d*3600.0) * (3600.0*365.25*24.0) [Arcsec/Year]
+    g_1 = 0.5 * (A_11 + A_22 - np.sqrt( (A_11 - A_22)**2.0 + 4.0 * A_12**2.0 ))
+    g_2 = 0.5 * (A_11 + A_22 + np.sqrt( (A_11 - A_22)**2.0 + 4.0 * A_12**2.0 ))
+    f_1 = 0.5 * (B_11 + B_22 + np.sqrt( (B_11 - B_22)**2.0 + 4.0 * B_12**2.0 ))
+    f_2 = 0.5 * (B_11 + B_22 - np.sqrt( (B_11 - B_22)**2.0 + 4.0 * B_12**2.0 ))
+
+    # Return Frequencies
+    return g_1, g_2, f_1, f_2
+
+
 def secular_frequencies_js_today():
     """
     Compute Present Day Jupiter/Saturn System Frequencies. Test Case.
@@ -357,6 +423,59 @@ def secular_frequencies_planets_and_asteroid(a_1, a_2, m_1, m_2, a_ast):
     g = 2.0 * G / n_ast / a_ast**2.0 * ( m_1 * N_1 + m_2 * N_2 )
     # f = - 2.0 * G / n_ast / a_ast**2.0 * ( m_1 * N_1 + m_2 * N_2 )
     f = -g
+
+    # Return Frequencies 
+    return g, f
+
+
+def secular_frequencies_planets_and_asteroid_gas(a_1, a_2, m_1, m_2, \
+                                                 a_ast, t_over_tau):
+    """
+    Compute secular frequencies g and f for an asteroid (massless test
+    particles) in the presence of two massive planets.
+
+    Be careful if you request too many (>~10) samples for a_ast. The code
+    runs a for-loop (in Fortran) to integrate the disk potential for each
+    value of a_ast, which can take a long time if you request many samples.
+
+    @param: a_1, a_2 - Planet Semi-Major Axis of Planets (AU)
+    @param: m_1, m_2 - Planet Masses (Solar Masses)
+    @param: a_ast - Asteroid Semi-Major Axis (AU)
+    @param: t_over_tau - Exponential Decay Factor for Gas Density (-)
+    @returns: g - Asteroid Perigee Precession Rate (Rad/Second)
+    @returns: f - Asteroid Line of Nodes Precession Frequencies (Rad/Second)
+    """
+
+    # Gas Terms (Internal CGS Conversion - Needs AU!)
+    if np.isscalar(a_ast):
+        S_ast, T_ast = ph.s_and_t(a_ast, t_over_tau)
+    else:
+        S_ast = np.zeros_like(a_ast) * np.nan
+        T_ast = np.zeros_like(a_ast) * np.nan
+        for ia, a_ast_loc in enumerate(a_ast):
+            S_ast[ia], T_ast[ia] = ph.s_and_t(a_ast_loc, t_over_tau)
+
+    # CGS 
+    G = C.G_cgs; Msun = C.msun * 1000.0
+    m_1 *= Msun
+    m_2 *= Msun
+    a_1 *= C.au2km * 1000.0 * 100.0
+    a_2 *= C.au2km * 1000.0 * 100.0
+    a_ast *= C.au2km * 1000.0 * 100.0
+
+    # Mean Motion
+    n_ast = np.sqrt(G*Msun/a_ast**3.0)
+
+    # What are these called?
+    N_1 = a_ast / 8.0 / a_1**2.0 * laplace_coefficient(1.5, 1, a_ast / a_1)
+    N_2 = a_ast / 8.0 / a_2**2.0 * laplace_coefficient(1.5, 1, a_ast / a_2)
+
+    # Frequencies (Rad/s)
+    # Conversion: Multiply (C.r2d*3600.0) * (3600.0*365.25*24.0) [Arcsec/Year]
+    g = 2.0 * G / n_ast / a_ast**2.0 * ( m_1 * N_1 + m_2 * N_2 ) + \
+        2.0 / n_ast / a_ast**2.0 * T_ast
+    f = - 2.0 * G / n_ast / a_ast**2.0 * ( m_1 * N_1 + m_2 * N_2 ) - \
+        2.0 / n_ast / a_ast**2.0 * S_ast
 
     # Return Frequencies 
     return g, f
