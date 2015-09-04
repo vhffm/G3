@@ -1,3 +1,5 @@
 Test/*
+Helpers/*.so
+Helpers/potential_helpers
 Video/*
 */*.pyc
