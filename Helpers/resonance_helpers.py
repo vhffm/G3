@@ -490,7 +490,7 @@ def secular_resonance_location(a_1, a_2, m_1, m_2):
     """
 
     # Scanning Range, Semi-Major Axis
-    a_ast = np.linspace(0.1, 5.0, 512)
+    a_ast = np.mgrid[0.1:5.0:0.01]
 
     # Compute Planetary Frequencies
     g_1, g_2, f_1, f_2 = secular_frequencies_planets(a_1, a_2, m_1, m_2)
@@ -499,24 +499,24 @@ def secular_resonance_location(a_1, a_2, m_1, m_2):
     g, f = secular_frequencies_planets_and_asteroid(a_1, a_2, m_1, m_2, a_ast)
 
     # Locate
-    g1_arg = np.argmin(np.abs(g-g_1))
-    g2_arg = np.argmin(np.abs(g-g_2))
-    f1_arg = np.argmin(np.abs(f-f_1))
-    f2_arg = np.argmin(np.abs(f-f_2))
+    arg_nu_5 = np.argwhere(np.diff(np.sign(g-g_1))**2.0 > 1.0e-16).squeeze()
+    arg_nu_6 = np.argwhere(np.diff(np.sign(g-g_2))**2.0 > 1.0e-16).squeeze()
+    arg_nu_15 = np.argwhere(np.diff(np.sign(f-f_1))**2.0 > 1.0e-16).squeeze()
+    arg_nu_16 = np.argwhere(np.diff(np.sign(f-f_2))**2.0 > 1.0e-16).squeeze()
 
-    a_nu_5 = a_ast[g1_arg]
-    a_nu_6 = a_ast[g2_arg]
-    a_nu_15 = a_ast[f1_arg]
-    a_nu_16 = a_ast[f2_arg]
+    a_nu_5  = a_ast[arg_nu_5]
+    a_nu_6  = a_ast[arg_nu_6]
+    a_nu_15  = a_ast[arg_nu_15]
+    a_nu_16  = a_ast[arg_nu_16]
 
-    # Override Non-Existence
-    if np.abs(g_1) < 1.0e-16:
+    # Write NaN for Non-Existing Resonances
+    if (not np.isscalar(a_nu_5)) and len(a_nu_5) == 0:
         a_nu_5 = np.nan
-    if np.abs(g_2) < 1.0e-16:
+    if (not np.isscalar(a_nu_6)) and len(a_nu_6) == 0:
         a_nu_6 = np.nan
-    if np.abs(f_1) < 1.0e-16:
+    if (not np.isscalar(a_nu_15)) and len(a_nu_15) == 0:
         a_nu_15 = np.nan
-    if np.abs(f_2) < 1.0e-16:
+    if (not np.isscalar(a_nu_16)) and len(a_nu_16) == 0:
         a_nu_16 = np.nan
 
     # Return
