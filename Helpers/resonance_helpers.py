@@ -686,3 +686,29 @@ def secular_resonance_location_js_today():
 
     # Return
     return a_nu_5, a_nu_6, a_nu_15, a_nu_16
+
+
+def scan_resonances(a_j, a_s, m_j, m_s, t_over_tau):
+    """
+    Locate Secular Resonances.
+
+    @param: a_1, a_2 - Planet Semi-Major Axis of Planets (AU)
+    @param: m_1, m_2 - Planet Masses (Solar Masses)
+    @param: t_over_tau - Exponential Decay Factor for Gas Density (-)
+    @returns: a_nu_5, a_nu_6 - Perigee (omega) Precession Res. (AU)
+    @returns: a_nu_15, a_nu_16 - Line of Nodes (Omega) Precession Res. (AU)
+    """
+
+    # Gas Disk?
+    if t_over_tau < 20:
+        a_nu_5, a_nu_6, a_nu_15, a_nu_16 = \
+            secular_resonance_location_gas(a_j, a_s, m_j, m_s, t_over_tau)
+
+    # No Gas
+    else:
+        a_nu_5, a_nu_6, a_nu_15, a_nu_16 = \
+            secular_resonance_location(a_j, a_s, m_j, m_s)
+
+    # Return Resonances
+    return a_nu_5, a_nu_6, a_nu_15, a_nu_16
+
