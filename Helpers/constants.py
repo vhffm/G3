@@ -56,6 +56,7 @@ mm2inch = 0.0393701  # inches
 
 # Convenience
 twopi = 2.0 * np.pi
+twothirds = 2.0/3.0
 
 # Genga Specific Conversions
 # Velocity Units [Genga Units <> km/s]
