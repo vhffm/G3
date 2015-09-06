@@ -104,7 +104,7 @@ def extract_resonances(cdir):
             a_nu_15_01[istep] = a_nu_15_loc
         else:
             if len(a_nu_15_loc) > 2:
-                print "// Found >2 locations for \nu_15. Error?"
+                print "// Found >2 locations for nu_15. Error?"
             a_nu_15_01[istep] = a_nu_15_loc[0]
             a_nu_15_02[istep] = a_nu_15_loc[1]
             
@@ -112,7 +112,7 @@ def extract_resonances(cdir):
             a_nu_16_01[istep] = a_nu_16_loc
         else:
             if len(a_nu_16_loc) > 2:
-                print "// Found >2 locations for \nu_16. Error?"
+                print "// Found >2 locations for nu_16. Error?"
             a_nu_16_01[istep] = a_nu_16_loc[0]
             a_nu_16_02[istep] = a_nu_16_loc[1]
             
