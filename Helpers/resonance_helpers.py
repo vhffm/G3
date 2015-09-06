@@ -523,6 +523,136 @@ def secular_resonance_location(a_1, a_2, m_1, m_2):
     return a_nu_5, a_nu_6, a_nu_15, a_nu_16
 
 
+def secular_resonance_location_gas(a_1, a_2, m_1, m_2, t_over_tau):
+    """
+    Compute Location of Secular Resonances.
+
+    @param: a_1, a_2 - Planet Semi-Major Axis of Planets (AU)
+    @param: m_1, m_2 - Planet Masses (Solar Masses)
+    @param: t_over_tau - Exponential Decay Factor for Gas Density (-)
+    @returns: a_nu_5, a_nu_6 - Perigee (omega) Precession Res. (AU)
+    @returns: a_nu_15, a_nu_16 - Line of Nodes (Omega) Precession Res. (AU)
+    """
+
+    # Compute Planetary Frequencies
+    g_1, g_2, f_1, f_2 = \
+        secular_frequencies_planets_gas(a_1, a_2, m_1, m_2, t_over_tau)
+
+    #
+    # #########################################################################
+    #
+    # Coarse Grid
+    #
+    # #########################################################################
+    #
+
+    # Grid at 0.1 AU Resolution
+    a_coarse = np.mgrid[0.1:5.0:0.1]
+
+    # Compute Asteroid (Massless Test Particle) Frequencies
+    g = np.zeros_like(a_coarse)
+    f = np.zeros_like(a_coarse)
+    for ii, a_loc in enumerate(a_coarse):
+        g[ii], f[ii] = \
+            secular_frequencies_planets_and_asteroid_gas(a_1, a_2, m_1, m_2, \
+                                                         a_loc.copy(), \
+                                                         t_over_tau)
+
+    # Locate
+    arg_nu_5 = np.argwhere(np.diff(np.sign(g-g_1))**2.0 > 1.0e-16).squeeze()
+    arg_nu_6 = np.argwhere(np.diff(np.sign(g-g_2))**2.0 > 1.0e-16).squeeze()
+    arg_nu_15 = np.argwhere(np.diff(np.sign(f-f_1))**2.0 > 1.0e-16).squeeze()
+    arg_nu_16 = np.argwhere(np.diff(np.sign(f-f_2))**2.0 > 1.0e-16).squeeze()
+
+    a_nu_5  = a_coarse[arg_nu_5]
+    a_nu_6  = a_coarse[arg_nu_6]
+    a_nu_15  = a_coarse[arg_nu_15]
+    a_nu_16  = a_coarse[arg_nu_16]
+
+    # Write NaN for Non-Existing Resonances
+    if (not np.isscalar(a_nu_5)) and len(a_nu_5) == 0:
+        a_nu_5 = np.nan
+    if (not np.isscalar(a_nu_6)) and len(a_nu_6) == 0:
+        a_nu_6 = np.nan
+    if (not np.isscalar(a_nu_15)) and len(a_nu_15) == 0:
+        a_nu_15 = np.nan
+    if (not np.isscalar(a_nu_16)) and len(a_nu_16) == 0:
+        a_nu_16 = np.nan
+
+    #
+    # #########################################################################
+    #
+    # Refined Grid
+    #
+    # #########################################################################
+    #
+
+    # Fine Grid @ 0.01 AU Resolution
+    a_fine = np.array([])
+
+    if not np.isnan(a_nu_5):
+        a_fine = \
+            np.concatenate([a_fine, np.mgrid[a_nu_5-0.1:a_nu_5+0.11:0.01]])
+
+    if not np.isnan(a_nu_6):
+        a_fine = \
+            np.concatenate([a_fine, np.mgrid[a_nu_6-0.1:a_nu_6+0.11:0.01]])
+
+    if not np.isnan(a_nu_15):
+        a_fine = \
+            np.concatenate([a_fine, np.mgrid[a_nu_15-0.1:a_nu_15+0.11:0.01]])
+
+    # Can occur twice!
+    if np.isscalar(a_nu_16):
+        if not np.isnan(a_nu_16):
+            a_fine = \
+                np.concatenate([a_fine, \
+                                np.mgrid[a_nu_16-0.11:a_nu_16+0.11:0.01]])
+    else:
+        for a_nu_16_loc in a_nu_16:
+            a_fine = \
+                np.concatenate([a_fine, \
+                                np.mgrid[a_nu_16_loc - 0.11:\
+                                         a_nu_16_loc + 0.11:\
+                                         0.01]])
+
+    # Reorder
+    a_fine = np.sort(a_fine)
+
+    # Compute Asteroid (Massless Test Particle) Frequencies
+    g = np.zeros_like(a_fine)
+    f = np.zeros_like(a_fine)
+    for ii, a_loc in enumerate(a_fine):
+        g[ii], f[ii] = \
+            secular_frequencies_planets_and_asteroid_gas(a_1, a_2, m_1, m_2, \
+                                                         a_loc.copy(), \
+                                                         t_over_tau)
+
+    # Locate
+    arg_nu_5 = np.argwhere(np.diff(np.sign(g-g_1))**2.0 > 1.0e-16).squeeze()
+    arg_nu_6 = np.argwhere(np.diff(np.sign(g-g_2))**2.0 > 1.0e-16).squeeze()
+    arg_nu_15 = np.argwhere(np.diff(np.sign(f-f_1))**2.0 > 1.0e-16).squeeze()
+    arg_nu_16 = np.argwhere(np.diff(np.sign(f-f_2))**2.0 > 1.0e-16).squeeze()
+
+    a_nu_5  = a_fine[arg_nu_5]
+    a_nu_6  = a_fine[arg_nu_6]
+    a_nu_15  = a_fine[arg_nu_15]
+    a_nu_16  = a_fine[arg_nu_16]
+
+    # Write NaN for Non-Existing Resonances
+    if (not np.isscalar(a_nu_5)) and len(a_nu_5) == 0:
+        a_nu_5 = np.nan
+    if (not np.isscalar(a_nu_6)) and len(a_nu_6) == 0:
+        a_nu_6 = np.nan
+    if (not np.isscalar(a_nu_15)) and len(a_nu_15) == 0:
+        a_nu_15 = np.nan
+    if (not np.isscalar(a_nu_16)) and len(a_nu_16) == 0:
+        a_nu_16 = np.nan
+
+    # Return
+    return a_nu_5, a_nu_6, a_nu_15, a_nu_16
+
+
 def secular_resonance_location_js_today():
     """
     Compute Present Day JS Secular Resonance Locations. Test Case.
