@@ -53,3 +53,27 @@ def get_volume_density(r, z=0.0, Sigma0=2000.0):
     # kg m-3
     return rho
 
+
+def get_volume_density_mmsn(r, z):
+    """
+    Compute Volume Density (r,z) for Minimum Mass Solar Nebula (Hayashi 1981).
+
+    @param: r - Radial Location (AU)
+    @param: z - Vertical Location (AU)
+    @return: rho - Volume Density (kg/m3)
+    """
+
+    # AU
+    r0 = 1.0
+
+    # g/cm3
+    rho = 1.4e-9 * (r/r0)**(-11./4.) * \
+          np.exp( - ( ( z / ( 0.047 * (r/r0)**(5./4.) ) )**2.0 ) )
+
+    # kg/m3
+    rho /= 1000.0
+    rho *= 100.0**3.0
+
+    # Return
+    return rho
+
