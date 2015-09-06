@@ -114,6 +114,9 @@ def extract_resonances(cdir):
         two_to_one[istep] = a_j * (2.0/1.0)**(-C.twothirds)
         three_to_one[istep] = a_j * (3.0/1.0)**(-C.twothirds)
         three_to_two[istep] = a_j * (3.0/2.0)**(-C.twothirds)
+
+        # Clean Up
+        del df
         
     # Prepare Data Frame
     data = { 'nu_5': a_nu_5, 'nu_6': a_nu_6, \
