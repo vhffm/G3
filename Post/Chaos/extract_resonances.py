@@ -77,7 +77,7 @@ def extract_resonances(cdir):
         # Debug?
         if nrun == 1:
             if nstep % int(1e8) == 0:
-                print "* Step %012/%012" (nstep, nsteps[-1])
+                print "** Step %012d/%012d" % (nstep, nsteps[-1])
 
         fname = "%s/Out_%s_%012d.dat" % (cdir, run_name, nstep)
         df = ioh.read_output_and_stack([fname], frame='heliocentric')
