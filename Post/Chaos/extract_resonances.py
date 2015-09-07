@@ -156,6 +156,8 @@ def extract_resonances(cdir):
 parser = argparse.ArgumentParser()
 parser.add_argument('-np', type=int, default=1, \
                     help='Number of Processes')
+parser.add_argument('-fout', '--output_file', default='Resonances.hdf5', \
+                    help='Name of Output File.')
 args = parser.parse_args()
 print "// Using %i Subprocesses" % args.np
 
@@ -212,7 +214,7 @@ df = pd.concat(result)
 df.reset_index(drop=True, inplace=True)
 
 # Save
-print "// Saving"
-with pd.HDFStore('Resonances.hdf5', 'w') as store:
+print "// Saving to %s" % args.output_file
+with pd.HDFStore("%s" % args.output_file, 'w') as store:
     store['df'] = df
 
