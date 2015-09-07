@@ -76,7 +76,7 @@ def extract_resonances(cdir):
 
         # Debug?
         if args.np == 1 or nrun == 1:
-            if nstep % int(1e8) == 0:
+            if nstep % int(1e7) == 0:
                 print "** Step %012d/%012d" % (nstep, nsteps[-1])
 
         fname = "%s/Out_%s_%012d.dat" % (cdir, run_name, nstep)
