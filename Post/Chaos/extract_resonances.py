@@ -75,7 +75,7 @@ def extract_resonances(cdir):
     for istep, nstep in enumerate(nsteps):
 
         # Debug?
-        if nrun == 1:
+        if args.np == 1 or nrun == 1:
             if nstep % int(1e8) == 0:
                 print "** Step %012d/%012d" % (nstep, nsteps[-1])
 
@@ -196,10 +196,16 @@ for iglob, xglob in enumerate(sorted(xglobs)):
     nsteps[iglob] = int(xglob.strip().split("/")[-1][:-4].split("_")[-1])
 
 # Loop Directories
-pool = mp.Pool(processes=args.np)
-result = pool.map(extract_resonances, dirs)
-pool.close()
-pool.join()
+if args.np == 1:
+    result = []
+    for idir, cdir in enumerate(dirs):
+        df_tmp = extract_resonances(cdir)
+        result.append(df_tmp)
+else:
+    pool = mp.Pool(processes=args.np)
+    result = pool.map(extract_resonances, dirs)
+    pool.close()
+    pool.join()
 
 # Join Data Frame
 df = pd.concat(result)
