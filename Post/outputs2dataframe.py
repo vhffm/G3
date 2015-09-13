@@ -28,7 +28,7 @@ else:
 
 # Loop Directories
 for idir, cdir in enumerate(dirs):
-    print "** %02d/%02d" % (idir, len(dirs))
+    print "** %02d/%02d" % (idir+1, len(dirs))
 
     # Glob Coordinate Output Files
     globs = glob.glob("%s/Out_*.dat" % cdir)
