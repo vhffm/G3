@@ -619,6 +619,9 @@ def secular_resonance_location_gas(a_1, a_2, m_1, m_2, t_over_tau):
     # Reorder
     a_fine = np.sort(a_fine)
 
+    # Inner Cutoff
+    a_fine = a_fine[a_fine>0.1]
+
     # Compute Asteroid (Massless Test Particle) Frequencies
     g = np.zeros_like(a_fine)
     f = np.zeros_like(a_fine)
