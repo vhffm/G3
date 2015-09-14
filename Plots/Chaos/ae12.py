@@ -248,6 +248,5 @@ for nstep in nsteps:
     fig.savefig("ae12_%012d.png" % nstep)
 
     # Clean Up
-    del ax
-    del fig
+    plt.close(fig)
 
