@@ -15,7 +15,14 @@ import numpy as np
 import pandas as pd
 import sys
 import other_helpers as oh
+import argparse
 
+
+# Parse Arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--tag', required=True, \
+                    help='Simulation Tag')
+args = parser.parse_args()
 
 # List of Directories
 if sys.stdin.isatty():
@@ -231,8 +238,8 @@ for nstep in nsteps:
     axarr[-1,0].set_ylabel('Eccentricity')
             
     # Title, Legend
-    fig.suptitle("nstep = %.0e, time = %.2e Myr" % \
-        (nstep, dfo.time.iloc[0]/1.0e6))
+    fig.suptitle("%s, nstep = %.0e, time = %.2e Myr" % \
+        (args.tag, nstep, dfo.time.iloc[0]/1.0e6))
 
     # Join Panels
     fig.subplots_adjust(hspace=0,wspace=0,top=0.96)
