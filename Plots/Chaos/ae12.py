@@ -238,7 +238,7 @@ for nstep in nsteps:
     axarr[-1,0].set_ylabel('Eccentricity')
             
     # Title, Legend
-    fig.suptitle("%s, nstep = %.0e, time = %.2e Myr" % \
+    fig.suptitle("%s // nstep = %.0e // time = %.2e Myr" % \
         (args.tag, nstep, dfo.time.iloc[0]/1.0e6))
 
     # Join Panels
