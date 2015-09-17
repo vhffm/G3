@@ -130,7 +130,10 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
 
 # Stack Collision Files For Multiple Genga Outputs
 # fnames = [ fname01, fname02, ... ]
-def read_collisions_and_stack(fnames, return_xyz=False, return_geometry=False):
+def read_collisions_and_stack(fnames, \
+                              return_xyz=False, \
+                              return_geometry=False, \
+                              xyz_xyonly=False):
     names_cols = [ "time", \
                    "pidi", "mi", "ri", \
                    "xi", "yi", "zi", \
@@ -185,9 +188,13 @@ def read_collisions_and_stack(fnames, return_xyz=False, return_geometry=False):
         df.vxj *= C.genga_to_kms
         df.vyj *= C.genga_to_kms
         df.vzj *= C.genga_to_kms
-        df["dv"] = np.sqrt((df.vxi-df.vxj)**2.0 + \
-                           (df.vyi-df.vyj)**2.0 + \
-                           (df.vzi-df.vzj)**2.0)
+        if xyz_xyonly:
+            df["dv"] = np.sqrt((df.vxi-df.vxj)**2.0 + \
+                               (df.vyi-df.vyj)**2.0 )
+        else:
+            df["dv"] = np.sqrt((df.vxi-df.vxj)**2.0 + \
+                               (df.vyi-df.vyj)**2.0 + \
+                               (df.vzi-df.vzj)**2.0)
         df["phi"] = vh.compute_angle(df.vxi, df.vyi, df.vzi, \
                                      df.vxj, df.vyj, df.vzj)
         df["phi"] *= C.r2d
