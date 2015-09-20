@@ -63,9 +63,11 @@ for itag_id, tag_id in enumerate(tag_ids):
 
 # Load Coordinates
 df_all = []
+print "// Loading Coordinates Files"
 for fnames_loc in fnames_all:
     df = pd.DataFrame()
     for fname in fnames_loc:
+        print "** %s" % fname
         with pd.HDFStore("%s" % fname, 'r') as store:
             df_tmp = store['df']
             df = pd.concat([df, df_tmp])
@@ -114,7 +116,7 @@ for nstep in nsteps:
         ax.set_ylim([0,0.6])
         
         # Title
-        ax.set_title("%s" % tags[isim])
+        ax.set_title("%s" % tags_unique[isim])
         
     # Remove Labels
     for iax, ax in enumerate(axarr.flatten()):
