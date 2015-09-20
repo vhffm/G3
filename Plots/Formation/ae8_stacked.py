@@ -46,7 +46,10 @@ for tag in tags:
     tag_last = tag
 
 # Retain Unique Tags
-tags = list(set(tags))
+tags_unique = []
+for tag in tags:
+    if not tag in tags_unique:
+        tags_unique.append(tag)
 
 # Create Lists with Filenames to Load
 fnames_all = []
