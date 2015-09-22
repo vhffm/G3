@@ -44,6 +44,11 @@ kpc2m = 3.08567758e19 # m
 cm2kpc = 0.01 / kpc2m # kpc
 g2msun = 0.001 / msun # msun
 
+# Cutoff Mass for Formation Convenience.
+# Planetesimal Below. Embryo/Planet Above.
+m_cutoff = 2.0e23    # kg
+m_cutoff /= mearth   # mearth
+
 # True Constants
 G = 6.67384e-11      # m3/kg/s2
 G = G / 1000.0**3.0  # km3/kg/s2
