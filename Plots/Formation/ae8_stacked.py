@@ -81,7 +81,7 @@ nsteps = np.asarray(df_all[0].nstep.unique())
 
 # Global Mass Scaling
 mx, nx = oh.mkline(5.0/8192.0, 1.0, 1.6, 12.0)
-mc, nc = oh.mkline(5.0/8192.0, 0.4, 1.6, 1.0)
+mc, nc = oh.mkline(5.0/8192.0, 0.6, 1.6, 1.0)
 
 # Loop
 print "// Processing %i Steps" % len(nsteps)
