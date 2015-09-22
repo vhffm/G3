@@ -319,7 +319,7 @@ for nstep in nsteps:
     # Title, Legend
     tout = dfo.time.iloc[0]
     txtsup = "nstep = %012d // time = %.2e Myr" % (nstep, tout)
-    txtsup += "  // (Planetesimals, Embryos/Planets, Total Particles)"
+    txtsup += "  // (Embryos/Planets, Planetesimals, Total Particles)"
     fig.suptitle(txtsup, fontsize='small')
 
     # Join Panels

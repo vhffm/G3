@@ -141,7 +141,7 @@ for nstep in nsteps:
 
     # Main Title
     txtsup = "nstep = %012d // time = %.2e Myr" % (nstep, tout/1.0e6)
-    txtsup += "  // (Planetesimals, Embryos/Planets, Total Particles)"
+    txtsup += "  // (Embryos/Planets, Planetesimals, Total Particles)"
     fig.suptitle(txtsup)
 
     # Save
