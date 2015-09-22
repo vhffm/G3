@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 import sys
 import other_helpers as oh
+import constants as C
 
 
 # List of Directories
@@ -116,6 +117,13 @@ for nstep in nsteps:
         # Style
         ax.set_xlim([0,6])
         ax.set_ylim([0,0.6])
+
+        # Annotation
+        ax.text(0.1, 0.9, "(%i, %i, %i)" % ( np.sum(df.mass>=C.m_cutoff), \
+                                             np.sum(df.mass<C.m_cutoff), \
+                                             len(df) ), \
+                va='top', ha='left', transform=ax.transAxes, \
+                fontsize='small')
         
         # Title
         ax.set_title("%s" % tags_unique[isim])
@@ -132,8 +140,9 @@ for nstep in nsteps:
     axarr.flatten()[4].set_ylabel('Eccentricity')
 
     # Main Title
-    fig.suptitle("nstep = %012d // time = %.2e Myr" % \
-        (nstep, tout/1.0e6))
+    txtsup = "nstep = %012d // time = %.2e Myr" % (nstep, tout/1.0e6)
+    txtsup += "  // (Planetesimals, Embryos/Planets, Total Particles)"
+    fig.suptitle(txtsup)
 
     # Save
     fig.savefig("ae8_stacked_%012d.png" % nstep)
