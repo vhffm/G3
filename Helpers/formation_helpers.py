@@ -48,10 +48,10 @@ def assign_wmf_raymond2004(a):
     return wmf
 
 
-def assign_wmf_ronco2015(a):
+def assign_wmf_ronco2014(a):
     """
-    Cf. Sec. 2 in Ronco+ (2015).
-    http://adsabs.harvard.edu/abs/2015arXiv150907217R
+    Cf. Sec. 2 in Ronco+ (2014).
+    http://adsabs.harvard.edu/abs/2014A&A...567A..54R
 
     @param: a - Semi Major Axis (Float)
     @return: wmf - Water Mass Fraction (Float)
