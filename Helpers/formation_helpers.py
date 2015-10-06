@@ -48,9 +48,9 @@ def assign_wmf_raymond2004(a):
     return wmf
 
 
-def assign_wmf_ronco2014(a):
+def assign_wmf_ronco2015(a):
     """
-    Cf. Sec. 2 in Ronco+ (2014).
+    Cf. Sec. 2 in Ronco+ (2015).
     http://adsabs.harvard.edu/abs/2015arXiv150907217R
 
     @param: a - Semi Major Axis (Float)
