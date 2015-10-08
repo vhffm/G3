@@ -39,7 +39,7 @@ def read_output(fname, frame):
          raise Exception("File Not Found: %s" % fname)
 
     # Remove Ghost Particles (Negative Masses)
-    df = df[df.mass<0.0]
+    df = df[df.mass>=0.0]
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
@@ -109,7 +109,7 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
     df.reset_index(drop=True, inplace=True)
 
     # Remove Ghost Particles (Negative Masses)
-    df = df[df.mass<0.0]
+    df = df[df.mass>=0.0]
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
