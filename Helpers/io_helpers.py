@@ -38,6 +38,9 @@ def read_output(fname, frame):
     except IOError:
          raise Exception("File Not Found: %s" % fname)
 
+    # Remove Ghost Particles (Negative Masses)
+    df = df[df.mass<0.0]
+
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
     vx = np.asarray(df.vx); vy = np.asarray(df.vy); vz = np.asarray(df.vz)
@@ -104,6 +107,9 @@ def read_output_and_stack(fnames, frame, drop_duplicates=True, nofail=False):
 
     # Reindex (Relevant if we load multiple snapshots into one file)
     df.reset_index(drop=True, inplace=True)
+
+    # Remove Ghost Particles (Negative Masses)
+    df = df[df.mass<0.0]
 
     # Convenience
     x = np.asarray(df.x); y = np.asarray(df.y); z = np.asarray(df.z)
