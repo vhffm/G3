@@ -50,8 +50,6 @@ def outs2df(cdir):
 parser = argparse.ArgumentParser()
 parser.add_argument('-np', type=int, default=1, \
                     help='Number of Processes')
-parser.add_argument('-fout', '--output_file', default='Resonances.hdf5', \
-                    help='Name of Output File.')
 args = parser.parse_args()
 print "// Using %i Subprocesses" % args.np
 
