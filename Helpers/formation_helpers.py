@@ -128,7 +128,7 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
 
     # Normalize to Total Number of Particles (Int{dN/dM} = N)
     else:
-        dmx = np.diff(10.0**mrange) # Midpoints in mrange, convert to lin
+        dmx = np.diff(10.0**evaluation_range) # Midpoints in mrange, convert to lin
         kde_evaluated_x = \
             (kde_evaluated[1:] + kde_evaluated[:-1]) / 2.0 # Linear Interp.
         N_0 = np.sum(kde_evaluated_x * dmx)
