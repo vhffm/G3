@@ -115,8 +115,7 @@ for fnames_res_loc in fnames_res_all:
 nsteps = np.asarray(dfo_all[0].nstep.unique())
 
 # Global Mass Scaling
-ms, ns = oh.mkline(5.0/2000.0, 2.0, 2.0, 36.0)
-mc, nc = oh.mkline(5.0/2000.0, 0.6, 2.0, 1.0)
+ms, ns = oh.mkline(5.0/2000.0, 1.0, 2.0, 16.0)
 
 # Loop Steps
 print "// Processing %i Outputs per Run" % len(nsteps)
@@ -158,10 +157,7 @@ for nstep in nsteps:
 
         # Scaling
         s = ms * np.asarray(dfo.mass) + ns
-        c = mc * np.asarray(dfo.mass) + nc
-
-        # Failsafe
-        c = np.minimum(c,1.0)
+        c = np.ones([len(df.mass),4]) * np.array([0.6,0.6,0.6,1.0])
 
         # #############################################
         # #############################################
@@ -171,9 +167,9 @@ for nstep in nsteps:
         
         # Plot
         ax.scatter(dfo.a, dfo.e, \
-                   c=c, s=s**2, alpha=0.9, \
-                   edgecolor='none', \
-                   cmap=mpl.cm.Greys, vmin=0, vmax=1)
+                   c=c, s=s**2, alpha=0.7, \
+                   edgecolor='k', \
+                   linewidth=0.5)
 
         # #############################################
         # #############################################
