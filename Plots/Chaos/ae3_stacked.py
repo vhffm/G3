@@ -157,7 +157,7 @@ for nstep in nsteps:
 
         # Scaling
         s = ms * np.asarray(dfo.mass) + ns
-        c = np.ones([len(df.mass),4]) * np.array([0.6,0.6,0.6,1.0])
+        c = np.ones([len(dfo.mass),4]) * np.array([0.6,0.6,0.6,1.0])
 
         # #############################################
         # #############################################
