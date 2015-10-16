@@ -1,6 +1,6 @@
 """
-Plot Semi-Major Axis vs. Eccentricity. 8 Panels. Stack.
-Requires Coordinates_XX.hdf5.
+Plot Semi-Major Axis vs. Eccentricity. 3 Panels. Stack.
+Requires Coordinates_XX.hdf5, Resonances_XX.hdf5.
 
 Dirlist Format:
 tag_01,/path/Coordinates_01.hdf5,/path/Resonances_01.hdf5
