@@ -11,6 +11,8 @@ Computes MMR:
 - 2:1
 - 3:1
 - 3:2
+- 5:2
+- 7:3
 
 With a gas disk present, nu_{16} can appear twice. We store both locations.
 
@@ -70,6 +72,8 @@ def extract_resonances(cdir):
     two_to_one = np.zeros_like(nsteps) * np.nan
     three_to_one = np.zeros_like(nsteps) * np.nan
     three_to_two = np.zeros_like(nsteps) * np.nan
+    five_to_two = np.zeros_like(nsteps) * np.nan
+    seven_to_three = np.zeros_like(nsteps) * np.nan
     
     # Loop Steps
     for istep, nstep in enumerate(nsteps):
@@ -121,6 +125,8 @@ def extract_resonances(cdir):
         two_to_one[istep] = a_j * (2.0/1.0)**(-C.twothirds)
         three_to_one[istep] = a_j * (3.0/1.0)**(-C.twothirds)
         three_to_two[istep] = a_j * (3.0/2.0)**(-C.twothirds)
+        five_to_two[istep] = a_j * (5.0/2.0)**(-C.twothirds)
+        seven_to_three[istep] = a_j * (7.0/3.0)**(-C.twothirds)
 
         # Clean Up
         del df
@@ -132,6 +138,8 @@ def extract_resonances(cdir):
              'two_to_one': two_to_one, \
              'three_to_one': three_to_one, \
              'three_to_two': three_to_two, \
+             'five_to_two': five_to_two, \
+             'seven_to_three': seven_to_three, \
              'nrun': np.ones_like(time) * nrun, \
              'time': time, 't_over_tau': t_over_tau, \
              'nstep': np.asarray(nsteps)  }
@@ -140,7 +148,8 @@ def extract_resonances(cdir):
              'nu_5', 'nu_6', \
              'nu_15_01', 'nu_15_02', \
              'nu_16_01', 'nu_16_02', \
-             'two_to_one', 'three_to_one', 'three_to_two' ]
+             'two_to_one', 'three_to_one', 'three_to_two', \
+             'five_to_two', 'seven_to_three' ]
     
     # Build Data Frame
     df = pd.DataFrame(data, columns=cols)
