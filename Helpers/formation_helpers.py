@@ -11,6 +11,8 @@ def return_sources(pid, dfc):
     Construct List of Mass Sources for a given Particle ID.
     Can be used to build Merger Trees.
 
+    @todo: Accelerate. Rewrite in Fortran?
+
     @param pid: Particle ID - [Integer]
     @param dfc: Collision list - [Pandas Dataframe from Io_Helpers] 
     @return sources: Source Particle IDs - [Numpy Array]
