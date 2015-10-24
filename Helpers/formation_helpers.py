@@ -4,6 +4,7 @@ Helpers for Formation Simulations.
 
 import numpy as np
 import stats_helpers as sh
+import pandas as pd
 
 
 def return_sources(pid, dfc):
