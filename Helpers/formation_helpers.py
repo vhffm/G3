@@ -141,3 +141,75 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
 
     # Return
     return kde_evaluated
+
+
+def compute_wmf(dfo, dfo_t0, dfc):
+    """
+    Compute Water Mass Fraction for all Particles.
+    Build Source List for Output, Compute WMF from Precursors.
+
+    @param: dfo - Coordinate Output @ Time [Pandas Dataframe]
+    @param: dfo_t0 - Outout @ Initial Time [Pandas Dataframe]
+    @param: dfc - Collision List [Pandas Dataframe]
+    @return: dfo - Coordinate Output @ Time w/ WMF Fields [Pandas Dataframe]
+    """
+
+    wmf_01 = np.ones(len(dfo)) * np.nan
+    wmf_02 = np.ones(len(dfo)) * np.nan
+    
+    dfc_now = dfc[dfc.time<=dfo.time.iloc[0]]
+    
+    # The Murder Loop
+    # @todo - Accelerate? Rewrite Source List Construction in Fortran?
+    for ii, dfo_row in enumerate(dfo.iterrows()):
+        # Info
+        if ii % int(len(dfo)/8) == 0:
+            print "%i/%i" % (ii,len(dfo))
+        
+        # Extract Series from One-Row Dataframe
+        dfo_loc = dfo_row[1]
+        
+        # Identify Source Particles
+        sources = return_sources(int(dfo_loc.pid), dfc_now)
+        dfo_sources = dfo_t0[dfo_t0.pid.isin(sources)]
+        
+        # Compute WMF (Raymond+ 2004, Ronco+ 2014)
+        dfo_sources.loc[:,'wmf_01'] = \
+            pd.Series(dfo_sources.a.apply(assign_wmf_raymond2004), \
+                      index=dfo_sources.index)
+        dfo_sources.loc[:,'wmf_02'] = \
+            pd.Series(dfo_sources.a.apply(assign_wmf_ronco2014), \
+                      index=dfo_sources.index)
+        wmf_01[ii] = np.sum(dfo_sources.mass * dfo_sources.wmf_01) / \
+            np.sum(dfo_sources.mass)
+        wmf_02[ii] = np.sum(dfo_sources.mass * dfo_sources.wmf_02) / \
+            np.sum(dfo_sources.mass)
+    
+    # Append WMF
+    dfo.loc[:,'wmf_01'] = wmf_01
+    dfo.loc[:,'wmf_02'] = wmf_02
+    
+    # Return
+    return dfo
+
+
+def compute_wmf_wrapper(wrapper):
+    """
+    Wrapper for WMF Computation.
+    Expects Arguments in List. Unfolds, and Calls WMF Computation.
+
+    @param: wrapper - List of Coordinates, Collisions [Python List]
+                      Cf. compute_wrapper() Doc
+    @return: dfo - Coordinate Output @ Time w/ WMF Fields [Pandas Dataframe]
+    """
+    
+    # Unwrap
+    dfo = wrapper[0]
+    dfo_t0 = wrapper[1]
+    dfc = wrapper[2]
+    
+    # Call Unwrapped
+    dfo = compute_wmf(dfo, dfo_t0, dfc)
+    
+    # Return
+    return dfo
