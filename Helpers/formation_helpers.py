@@ -144,7 +144,7 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
     return kde_evaluated
 
 
-def compute_wmf(dfo, dfo_t0, dfc):
+def compute_wmf(dfo, dfo_t0, dfc, showstep=False):
     """
     Compute Water Mass Fraction for all Particles.
     Build Source List for Output, Compute WMF from Precursors.
@@ -164,8 +164,9 @@ def compute_wmf(dfo, dfo_t0, dfc):
     # @todo - Accelerate? Rewrite Source List Construction in Fortran?
     for ii, dfo_row in enumerate(dfo.iterrows()):
         # Info
-        if ii % int(len(dfo)/8) == 0:
-            print "%i/%i" % (ii,len(dfo))
+        if showstep:
+            if ii % int(len(dfo)/8) == 0:
+                print "%i/%i" % (ii,len(dfo))
         
         # Extract Series from One-Row Dataframe
         dfo_loc = dfo_row[1]
