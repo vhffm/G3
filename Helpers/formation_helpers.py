@@ -18,12 +18,10 @@ def return_sources(pid, dfc):
     @param dfc: Collision list - [Pandas Dataframe from Io_Helpers] 
     @return sources: Source Particle IDs - [Numpy Array]
     """
-    dfc = dfc.sort(columns="time", ascending=True)
+    dfc = dfc.sort(columns="time", ascending=False)
     sources = np.zeros(len(dfc)+1) * np.nan
     sources[0] = pid
-    for ii, irow in enumerate(range(len(dfc))):
-        irow = len(dfc)-irow-1
-        dfc_loc = dfc.iloc[irow]
+    for ii, row in dfc.iterrows():
         if dfc_loc.pidi in sources:
             sources[ii+1] = int(dfc_loc.pidj)
         elif dfc_loc.pidj in sources:
