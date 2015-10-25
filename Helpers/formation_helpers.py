@@ -27,7 +27,7 @@ def return_sources(pid, dfc):
         elif dfc_loc.pidj in sources:
             sources[ii+1] = int(dfc_loc.pidi)
     sources = sources[~np.isnan(sources)]
-    sources = np.asarray(source, dtype=np.int64)
+    sources = np.asarray(sources, dtype=np.int64)
     return sources
 
 
