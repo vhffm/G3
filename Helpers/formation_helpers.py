@@ -22,10 +22,10 @@ def return_sources(pid, dfc):
     sources = np.zeros(len(dfc)+1) * np.nan
     sources[0] = pid
     for ii, row in dfc.iterrows():
-        if dfc_loc.pidi in sources:
-            sources[ii+1] = int(dfc_loc.pidj)
-        elif dfc_loc.pidj in sources:
-            sources[ii+1] = int(dfc_loc.pidi)
+        if row.pidi in sources:
+            sources[ii+1] = int(row.pidj)
+        elif row.pidj in sources:
+            sources[ii+1] = int(row.pidi)
     sources = sources[~np.isnan(sources)]
     sources = np.asarray(sources, dtype=np.int64)
     return sources
