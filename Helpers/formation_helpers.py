@@ -19,15 +19,17 @@ def return_sources(pid, dfc):
     @return sources: Source Particle IDs - [Numpy Array]
     """
     dfc = dfc.sort(columns="time", ascending=True)
-    sources = [pid]
-    for irow in range(len(dfc)):
+    sources = np.zeros(len(dfc)+1) * np.nan
+    sources[0] = pid
+    for ii, irow in enumerate(range(len(dfc))):
         irow = len(dfc)-irow-1
         dfc_loc = dfc.iloc[irow]
         if dfc_loc.pidi in sources:
-            sources.append(int(dfc_loc.pidj))
+            sources[ii+1] = int(dfc_loc.pidj)
         elif dfc_loc.pidj in sources:
-            sources.append(int(dfc_loc.pidi))
-    sources = np.asarray(sources, dtype=np.int64)
+            sources[ii+1] = int(dfc_loc.pidi)
+    sources = sources[~np.isnan(sources)]
+    sources = np.asarray(source, dtype=np.int64)
     return sources
 
 
