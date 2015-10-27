@@ -172,8 +172,12 @@ def compute_wmf(dfo, dfo_t0, dfc, showstep=False):
         dfo_loc = dfo_row[1]
         
         # Identify Source Particles
-        sources = return_sources(int(dfo_loc.pid), dfc_now)
-        dfo_sources = dfo_t0[dfo_t0.pid.isin(sources)]
+        sources = \
+            return_sources(int(dfo_loc.pid), \
+                           dfc_now[dfc_now.ifname == int(dfo_loc.ifname)])
+        dfo_sources = \
+            dfo_t0[(dfo_t0.pid.isin(sources)) & \
+                   (dfo_t0.ifname == int(dfo_loc.ifname))]
         
         # Compute WMF (Raymond+ 2004, Ronco+ 2014)
         dfo_sources.loc[:,'wmf_01'] = \
