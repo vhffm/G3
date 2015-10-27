@@ -158,6 +158,10 @@ def compute_wmf(dfo, dfo_t0, dfc, showstep=False):
     wmf_01 = np.ones(len(dfo)) * np.nan
     wmf_02 = np.ones(len(dfo)) * np.nan
     
+    a0_10 = np.ones(len(dfo)) * np.nan
+    a0_50 = np.ones(len(dfo)) * np.nan
+    a0_90 = np.ones(len(dfo)) * np.nan
+
     dfc_now = dfc[dfc.time<=dfo.time.iloc[0]]
     
     # The Murder Loop
@@ -190,10 +194,20 @@ def compute_wmf(dfo, dfo_t0, dfc, showstep=False):
             np.sum(dfo_sources.mass)
         wmf_02[ii] = np.sum(dfo_sources.mass * dfo_sources.wmf_02) / \
             np.sum(dfo_sources.mass)
+
+        # Stats for Source Distribution
+        a0_10[ii] = np.percentile(dfo_sources.a, 10)
+        a0_50[ii] = np.percentile(dfo_sources.a, 50)
+        a0_90[ii] = np.percentile(dfo_sources.a, 90)
     
     # Append WMF
     dfo.loc[:,'wmf_01'] = wmf_01
     dfo.loc[:,'wmf_02'] = wmf_02
+
+    # Append Stats for Source Distribution
+    dfo.loc[:,'a0_10'] = a0_10
+    dfo.loc[:,'a0_50'] = a0_50
+    dfo.loc[:,'a0_90'] = a0_90
     
     # Return
     return dfo
