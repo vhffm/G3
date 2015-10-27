@@ -21,7 +21,7 @@ def return_sources(pid, dfc):
     dfc = dfc.sort(columns="time", ascending=False)
     sources = np.zeros(len(dfc)+1) * np.nan
     sources[0] = pid
-    for ii, row in dfc.iterrows():
+    for ii, row in dfc.reset_index(drop=True).iterrows():
         if row.pidi in sources:
             sources[ii+1] = int(row.pidj)
         elif row.pidj in sources:
