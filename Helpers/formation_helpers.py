@@ -181,7 +181,7 @@ def compute_wmf(dfo, dfo_t0, dfc, showstep=False):
                            dfc_now[dfc_now.ifname == int(dfo_loc.ifname)])
         dfo_sources = \
             dfo_t0[(dfo_t0.pid.isin(sources)) & \
-                   (dfo_t0.ifname == int(dfo_loc.ifname))]
+                   (dfo_t0.ifname == int(dfo_loc.ifname))].copy()
         
         # Compute WMF (Raymond+ 2004, Ronco+ 2014)
         dfo_sources.loc[:,'wmf_01'] = \
