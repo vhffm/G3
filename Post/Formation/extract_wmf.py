@@ -75,7 +75,7 @@ for istep, nstep in enumerate(nsteps):
 # Loop Steps
 print "// Computing WMF & Sources for %i Steps" % len(targets)
 pool = mp.Pool(processes=args.np)
-result = pool.map(fh.compute_wmf_wrapper, targets)
+result = pool.map(fh.compute_wmf_wrapper, targets, 1)
 pool.close()
 pool.join()
 
