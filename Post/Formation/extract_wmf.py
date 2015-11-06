@@ -1,5 +1,6 @@
 """
 Extract Water Mass Fraction, Source Distribution Statistics.
+Processing 9000 EJS Outputs Takes ~ 1 Hour on 12 Cores. 
 """
 
 import io_helpers as ioh
@@ -18,6 +19,8 @@ import numpy as np
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument('--all', action='store_true', \
+                    help='Process Full Output Range (9000).')
 parser.add_argument('-np', type=int, default=1, \
                     help='Number of Processes')
 parser.add_argument('-fout', '--output_file', default='Coordinates_WMF.hdf5', \
@@ -45,7 +48,10 @@ else:
     sys.exit()
 
 # Define Steps
-nsteps = np.array([ 0, 6e6, 6e7, 6e8, 3e9, 6e9, 9e9], dtype=np.int64)
+if args.all:
+    nsteps = np.asarray(np.mgrid[0:9e9+1e6:1e6], np.int64)
+else:
+    nsteps = np.array([ 0, 6e6, 6e7, 6e8, 3e9, 6e9, 9e9], dtype=np.int64)
 
 # The Globbit
 globs = glob.glob("%s/Out_*.dat" % cdir)
