@@ -8,6 +8,74 @@ import vector_helpers as vh
 import constants as C
 
 
+def assign_ell(row):
+    """
+    Compute Projected Interaction Distance (X-Section) for Collisions.
+    Cf. Quintana 2015, Eqn. (4), Fig. 7
+    http://adsabs.harvard.edu/abs/2015arXiv151103663Q
+
+    To call this function, use dfc.apply(assign_ell, axis='columns').
+    Here, dfc is a DataFrame of Particle Collisions.
+
+    @param: row - Pandas DataFrame Row [Series]
+    @return: ell - Projected Interaction Distance (X-Section) [Numpy Float]
+    """
+    
+    B = np.sin(row.theta*C.d2r) * ( row.ri + row.rj )
+    
+    if (B + row.rj) <= row.ri:
+        ell = 2.0 * row.rj
+    else:
+        ell = row.rj + row.ri - B
+    
+    return ell
+
+
+def compute_specific_impact_energy(dfc):
+    """
+    Compute the Specific Impact Energy for Collisions.
+    Cf. Quintana 2015, Eqns. (1,2,3,4,5,6,7)
+    http://adsabs.harvard.edu/abs/2015arXiv151103663Q
+
+    The input collision dataframe must have been processed to include
+    collisions geometries. We require impact velocities and angle.
+
+    @param: dfc - Genga Collision DataFrame [Pandas DataFrame]
+    @return: dfc - Genga Collision DataFrame [Pandas DataFrame]
+    """
+
+    # Reduce Mass, Base Specific Impact Energy
+    # Eqns. (1,2)
+    mu = (dfc.mi * dfc.mj) / (dfc.mi + dfc.mj)           # Msun
+    Q = mu * dfc.v_impact**2.0 / 2.0 / (dfc.mi + dfc.mj) # km2/s2
+    Q *= 1000.0**2.0                                     # m2/s2
+                                                         # = kg m2/s2 1/kg
+                                                         # = J/kg
+
+    # Write Uncorrected Q
+    dfc['Q'] = Q
+
+    # Compute Geometry Corrected Specific Impact Energy
+    # Eqns. (4,5,6,7)
+    ell = dfc.apply(assign_ell, axis='columns')
+    alpha = ( 3.0 * dfc.rj * ell**2.0 - ell**3.0 ) / ( 4.0 * dfc.rj**3.0 )
+    mu_alpha = ( alpha * dfc.mi * dfc.mj ) / ( alpha * dfc.mj + dfc.mi )
+    QPrime = Q * mu_alpha / mu
+
+    # Write QPrime
+    dfc['QPrime'] = QPrime
+
+    # Compute Shock Wave Corrected Specific Impact Energy
+    # Eqn. (3)
+    Qs = QPrime * ( 1.0 + dfc.mj/dfc.mi ) * ( 1.0 - np.sin(dfc.theta * C.d2r) )
+
+    # Write to DataFrame
+    dfc['Qs'] = Qs
+
+    # Return DataFrame
+    return dfc
+
+
 def reconstruct_geometries(dfc):
     """
     Reconstruct collision geometries by integrating to the boundary.
