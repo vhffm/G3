@@ -155,8 +155,8 @@ def reconstruct_geometries(dfc):
         r2 = dfc_loc.rj
 
         # Cutoff Distance (km)
-        dlo = 0.99*(r1+r2)
-        dhi = 1.01*(r1+r2)
+        dlo = 0.95*(r1+r2)
+        dhi = 1.05*(r1+r2)
 
         # Estimate Time to Impacts (s), Determine Steps (-)
         dd = np.sqrt(x2**2.0 + y2**2.0 + z2**2.0)
