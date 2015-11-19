@@ -29,19 +29,6 @@ def reconstruct_geometries(dfc):
     @return: b_over_r_all - Normalised Impact Parameter (-) [Numpy Float Array]
     """
 
-    #
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #
-    # @TODO - Right now, we assume particle 2 is a test (massless) particle.
-    # 
-    # Making this particle massive will give it velocity and change it's 
-    # position after we run the integrator. In this case, we need to shift
-    # the velocities and positions back into the frame of particle 1
-    # after the integration terminates!
-    #
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #
-
     # Compute Relative Position
     dfc['dx'] = dfc.xj - dfc.xi
     dfc['dy'] = dfc.yj - dfc.yi
@@ -93,7 +80,7 @@ def reconstruct_geometries(dfc):
 
         # Mass (kg)
         m1 = dfc_loc.mi * C.mearth
-        m2 = m1/1.0e6
+        m2 = dfc_loc.mj * C.mearth
 
         # Radius (km)
         r1 = dfc_loc.ri
@@ -111,7 +98,8 @@ def reconstruct_geometries(dfc):
         dt = tt / float(nsteps)
 
         # Integrate
-        _, _, _, _, _, _, x, y, z, vx, vy, vz, terminated = \
+        x1_out, y1_out, z1_out, vx1_out, vy1_out, vz1_out, \
+        x2_out, y2_out, z2_out, vx2_out, vy2_out, vz2_out, terminated = \
             dh.integrate_system_3d(x1, y1, z1, vx1, vy1, vz1, \
                                    x2, y2, z2, vx2, vy2, vz2, \
                                    m1, m2, dt, 2.5 * nsteps, \
@@ -120,6 +108,14 @@ def reconstruct_geometries(dfc):
         # Extract Geometry.
         # Only if the integration managed to put the body on the boundary.
         if terminated:
+
+            # Shift Frame
+            vx = np.asarray(vx2_out) - np.asarray(vx1_out)
+            vy = np.asarray(vy2_out) - np.asarray(vy1_out)
+            vz = np.asarray(vz2_out) - np.asarray(vz1_out)
+            x = np.asarray(x2_out) - np.asarray(x1_out)
+            y = np.asarray(y2_out) - np.asarray(y1_out)
+            z = np.asarray(z2_out) - np.asarray(z1_out)
 
             # Impact Velocity (km/s)
             v_impact = np.sqrt(vx[-1]**2.0 + vy[-1]**2.0 + vz[-1]**2.0)
