@@ -23,7 +23,7 @@ parser.add_argument('-fout', '--output_file', default='Collisions.hdf5', \
 args = parser.parse_args()
 
 # Load Collisions
-print "// Loading Collisions"
+print "// Loading Collisions from %s" % args.input_file
 dfc = ioh.read_collisions_and_stack([args.input_file], return_xyz=True)
 
 # Reconstruct Geometries
