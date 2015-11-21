@@ -84,7 +84,8 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
     1. Mass-Weighted Semi-Major Axis Distribution
     2. Mass-Weighted Eccentricity Distribution
     3. Mass-Weighted Inclination Distribution
-    4. Mass Function.
+    4. Water Mass Fraction
+    5. Mass Function.
 
     Picking a cov_tight_factor is a bit of a dark art. Too small and the 
     KDE is way too smooth. Too large and the resulting KDE doesn't smooth over
@@ -106,6 +107,8 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
         input_array = np.asarray(df.e)
     elif variable == 'i':
         input_array = np.asarray(df.i)
+    elif variable == 'wmf':
+        input_array = np.log10(np.asarray(df.wmf_02))
     elif variable == 'm':
         input_array = np.log10(np.asarray(df.mass))
     else:
