@@ -329,6 +329,10 @@ for nstep in nsteps:
         ax.set_xscale('log')
         ax.set_yscale('log')
 
+    # Grid
+    for ax in axarr.flatten():
+        ax.grid(True)
+
     # Ticks
     for ax in axarr.flatten():
     #     ax.xaxis.set_major_locator(\
