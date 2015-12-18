@@ -76,7 +76,7 @@ def assign_wmf_ronco2014(a):
 
 
 def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
-                cov_tight_factor=4.0):
+                cov_tight_factor=4.0, integrates_to=-1):
     """
     Compute Kernel Density Estimate for Formation Runs.
 
@@ -92,11 +92,15 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
     adjacent points at all. Usually, power of 2 in the range 2 to 12 are 
     reasonable. Use common sense. (@todo: Add literature link.)
 
+    The mass function dN/d(logM) integrates to the variable integrates_to.
+    This defaults to -1, where it integrates to the number of particles.
+
     @param: df - Genga Coordinate DataFrame [Pandas DataFrame]
     @param: evaluation_range - Range over which to compute KDE [Np Float Array]
     @param: evaluation_range_step - Step size for Evaluation Range [Float]
     @param: variable: - Variable for which to compute KDE (a,e,i,m) [String]
     @param: cov_tight_factor - Tighten covariance by this factor [Float]
+    @param: integrates_to - KDE integrates to this value (dN/dm = X) [Float]
     @return: kde_evaluated - KDE evaluated on evaluation_range [Np Float Array]
     """
 
@@ -139,7 +143,10 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
         kde_evaluated_x = \
             (kde_evaluated[1:] + kde_evaluated[:-1]) / 2.0 # Linear Interp.
         N_0 = np.sum(kde_evaluated_x * dmx)
-        norm = len(df) / N_0
+        if integrates_to > 0.0:
+            norm = integrates_to / N_0
+        else:
+            norm = len(df) / N_0
 
     # Apply Normalization
     kde_evaluated *= norm
