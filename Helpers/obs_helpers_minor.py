@@ -17,9 +17,10 @@ def load_astorb(fname='astorb.dat', short=False):
              : B-V Mag + Albedo => Diameter
              : Diameter + Density => Mass
 
-    @todo: Find back reference for conversion...
+    Conversions from Caption of Fig. 1 in Petit+ 2001
+    Cf. http://adsabs.harvard.edu/abs/2001Icar..153..338P
 
-    Takes ~8 Minutes for Full File (~650k Rows).
+    Takes ~8 Minutes for Full File (~670k Rows).
     Cf. ftp://cdsarc.u-strasbg.fr/pub/cats/B/astorb/astorb.html
 
     @param: fname - Filename for Asteroid Database [String]
