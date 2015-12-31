@@ -40,3 +40,20 @@ def radius2mass(radius, rho=2.0):
     rho *= (100.0*1000.0)**3.0 # kg/km3
     mass = 4./3. * np.pi* radius**3.0 * rho # kg
     return mass
+
+
+def rm2density(radius, mass):
+    """
+    Compute Density from Radius & Mass.
+
+    @param radius - radius - [km]
+    @param mass - mass - [kg]
+    @return density - density - [g/cm3]
+    """
+
+    volume = 4.0/3.0 * np.pi * radius**3.0 # km3
+    density = mass / volume  # kg/km3
+    density *= 1000.0        # g/km3
+    density /= (1000.0)**3.0 # g/m3
+    density /= (100.0)**3.0  # g/cm3
+    return density
