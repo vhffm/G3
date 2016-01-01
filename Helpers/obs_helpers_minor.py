@@ -19,6 +19,7 @@ def load_astorb(fname='astorb.dat', short=False):
 
     Conversions from Caption of Fig. 1 in Petit+ 2001
     Cf. http://adsabs.harvard.edu/abs/2001Icar..153..338P
+    Cf. http://www.minorplanetcenter.net/iau/lists/Sizes.html
 
     Takes ~8 Minutes for Full File (~670k Rows).
     Cf. ftp://cdsarc.u-strasbg.fr/pub/cats/B/astorb/astorb.html
@@ -73,6 +74,10 @@ def load_astorb(fname='astorb.dat', short=False):
     df["Type"] = df["Type"].str.replace('?', '')
     df["Type"] = df["Type"].str[0]
 
+    #
+    # THE FOLLOWING ONLY HOLDS FOR THE ASTEROID BELT
+    #
+
     # Albedo Table
     types = [ "K", "M", "S", "A", "E", "C", "D", "F", \
               "G", "R", "V", "L", "P", "T", np.nan ]
@@ -98,6 +103,49 @@ def load_astorb(fname='astorb.dat', short=False):
 
     # Merge Albedo, Density
     df = df.merge(df_properties, how="left", on="Type")
+
+    #
+    # ADJUST FOR OUTER SOLAR SYSTEM
+    #
+    # Known Albedos: 
+    # - Eris (0.96)
+    # - Pluto (0.49 to 0.66)
+    # - Charon (0.2 to 0.6)
+    # - 67p (0.06) [Thrown In Comet, Fluffy!]
+    # - Icy Stuff (0.5; http://www.minorplanetcenter.net/iau/lists/Sizes.html)
+    # - Chaos (0.04 to 0.08)
+    # - Varuna (0.08 to 0.16)
+    # - Sedna (0.26 to 0.38)
+    #
+    # Known Densities (g/cm3)
+    # - Eris (2.52)
+    # - Pluto (1.86)
+    # - Charon (1.7)
+    # - 67p (0.4) [Throw In Comet, Fluffy!]
+    # - Varuna (0.992)
+    #
+    # For known albedos/densities that we bothered to tabulate, use them.
+    # Otherwise, use 0.6 (albedo), and 1.2 g/cm3 (density)
+    #
+
+    # Catch-All
+    df.loc[df.a > 4.5, 'Albedo' ] = 0.6
+    df.loc[df.a > 4.5, 'Density'] = 1.2
+
+    # Tabulated Objects
+    # Albedo
+    df.loc[df.Name=='Eris',   'Albedo']  = 0.96
+    df.loc[df.Name=='Pluto',  'Albedo']  = 0.55
+    df.loc[df.Name=='Charon', 'Albedo']  = 0.40
+    df.loc[df.Name=='Chaos',  'Albedo']  = 0.06
+    df.loc[df.Name=='Varuna', 'Albedo']  = 0.12
+    df.loc[df.Name=='Sedna',  'Albedo']  = 0.32
+
+    # Density
+    df.loc[df.Name=='Eris',   'Density'] = 2.52
+    df.loc[df.Name=='Pluto',  'Density'] = 1.86
+    df.loc[df.Name=='Charon', 'Density'] = 1.70
+    df.loc[df.Name=='Varuna', 'Density'] = 0.99
 
     # Compute Missing Diameters
     # @todo - Ref???
