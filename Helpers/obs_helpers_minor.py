@@ -134,18 +134,22 @@ def load_astorb(fname='astorb.dat', short=False):
 
     # Tabulated Objects
     # Albedo
-    df.loc[df.Name=='Eris',   'Albedo']  = 0.96
-    df.loc[df.Name=='Pluto',  'Albedo']  = 0.55
-    df.loc[df.Name=='Charon', 'Albedo']  = 0.40
-    df.loc[df.Name=='Chaos',  'Albedo']  = 0.06
-    df.loc[df.Name=='Varuna', 'Albedo']  = 0.12
-    df.loc[df.Name=='Sedna',  'Albedo']  = 0.32
+    df.loc[df.Name=='Eris',     'Albedo']  = 0.96
+    df.loc[df.Name=='Pluto',    'Albedo']  = 0.55
+    df.loc[df.Name=='Charon',   'Albedo']  = 0.40
+    df.loc[df.Name=='Chaos',    'Albedo']  = 0.06
+    df.loc[df.Name=='Varuna',   'Albedo']  = 0.12
+    df.loc[df.Name=='Sedna',    'Albedo']  = 0.32
+    df.loc[df.Name=='Makemake', 'Albedo']  = 0.80
+    df.loc[df.Name=='Haumea',   'Albedo']  = 0.75
 
     # Density
-    df.loc[df.Name=='Eris',   'Density'] = 2.52
-    df.loc[df.Name=='Pluto',  'Density'] = 1.86
-    df.loc[df.Name=='Charon', 'Density'] = 1.70
-    df.loc[df.Name=='Varuna', 'Density'] = 0.99
+    df.loc[df.Name=='Eris',     'Density'] = 2.52
+    df.loc[df.Name=='Pluto',    'Density'] = 1.86
+    df.loc[df.Name=='Charon',   'Density'] = 1.70
+    df.loc[df.Name=='Varuna',   'Density'] = 0.99
+    df.loc[df.Name=='Makemake', 'Density'] = 2.30
+    df.loc[df.Name=='Haumea',   'Density'] = 2.95
 
     # Compute Missing Diameters
     # @todo - Ref???
