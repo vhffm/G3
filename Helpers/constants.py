@@ -26,8 +26,9 @@ mocean = 1.39e21 # kg
 t0ss = -4.568 # Gyr
 
 # Radii
-Rearth = 6371.0 # km
-Rmoon  = 1737.1 # km
+Rearth   = 6371.0  # km
+Rmoon    = 1737.1  # km
+Rjupiter = 69911.0 # km
 
 # Cross-Section Areas
 Aearth = np.pi * Rearth**2.0 # km2
