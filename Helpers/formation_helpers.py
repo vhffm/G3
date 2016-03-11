@@ -116,6 +116,8 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
         input_array = np.asarray(df.i)
     elif variable == 'wmf':
         input_array = np.log10(np.asarray(df.wmf_02))
+    elif variable == 'Qs':
+        input_array = np.log10(np.asarray(df.Qs))
     elif variable == 'm':
         input_array = np.log10(np.asarray(df.mass))
     else:
