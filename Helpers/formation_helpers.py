@@ -79,7 +79,7 @@ def assign_wmf_ronco2014(a):
 
 
 def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
-                cov_tight_factor=4.0, integrates_to=-1):
+                cov_tight_factor=4.0, integrates_to=-1, noweights=False):
     """
     Compute Kernel Density Estimate for Formation Runs.
 
@@ -125,6 +125,10 @@ def compute_kde(df, evaluation_range, evaluation_range_step, variable, \
     if variable in [ 'a', 'e', 'i' ]:
         weights = np.asarray(df.mass/df.mass.max())
     else:
+        weights = np.ones_like(df.mass)
+
+    # Override Weights?
+    if noweights:
         weights = np.ones_like(df.mass)
         
     # Compute KDE
