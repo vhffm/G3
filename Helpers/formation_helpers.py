@@ -18,7 +18,10 @@ def return_sources(pid, dfc):
     @param dfc: Collision list - [Pandas Dataframe from Io_Helpers] 
     @return sources: Source Particle IDs - [Numpy Array]
     """
-    dfc = dfc.sort(columns="time", ascending=False)
+    if int(pd.__version__.split('.')[1]) >= 17:
+       dfc = dfc.sort_values(by='time', ascending=False) 
+    else:
+        dfc = dfc.sort(columns="time", ascending=False)
     sources = np.zeros(len(dfc)+1) * np.nan
     sources[0] = pid
     for ii, row in dfc.reset_index(drop=True).iterrows():
