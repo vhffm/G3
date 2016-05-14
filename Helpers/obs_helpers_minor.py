@@ -38,7 +38,8 @@ def load_astorb(fname='astorb.dat', short=False):
 
     # Ka-Ching
     colspecs = [ (0, 6), (7, 25), (26, 41), (42, 48), \
-                 (49, 53), (54, 58), (59, 64), (65, 72), (73, 94), \
+                 (49, 53), (54, 58), (59, 64), (65, 72), \
+                 (71, 74), (75, 78), (79, 82), (83, 86), (87, 90), (91, 94), \
                  (95, 100), (101, 105), (106, 114), (115, 125), (126, 136), \
                  (137, 147), (148, 157), (158, 168), (169, 181), \
                  (182, 190), (191, 198), (199, 207), (208, 216), \
@@ -48,7 +49,8 @@ def load_astorb(fname='astorb.dat', short=False):
     # H = Absolute Magnitude
     # B-V = Colour Index
     colnames = [ "Number", "Name", "Computer", "Magnitude", \
-                 "Slope", "B-V", "Diameter", "Type", "IntCodes", \
+                 "Slope", "B-V", "Diameter", "Type", \
+                 "Xflg", "Oflg", "Sflg", "MPCC", "LowC", "FlaC", \
                  "Arc", "NObservations", "Epoch", "M", "omega", "Omega", \
                  "i", "e", "a", "ComputeDate", "CEU", "CEU-Rate", "CEU-Date", \
                  "PEU", "PEU-Max", "PEU-Max10", "PEU-Max10-Date", \
@@ -61,11 +63,11 @@ def load_astorb(fname='astorb.dat', short=False):
     if short:
         df = pd.read_fwf(fname, colspecs=colspecs, \
                          header=None, names=colnames, \
-                         parse_dates=[11,18,21,23,25,27], nrows=1000)
+                         parse_dates=[16,23,26,28,30,32], nrows=1000)
     else:
         df = pd.read_fwf(fname, colspecs=colspecs, header=None, \
                          names=colnames, \
-                         parse_dates=[11,18,21,23,25,27])
+                         parse_dates=[16,23,26,28,30,32])
 
     # Compute qQ
     df["Q"] = df["a"] * ( 1.0 + df["e"] )
