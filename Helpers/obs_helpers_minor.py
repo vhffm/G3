@@ -171,10 +171,3 @@ def load_astorb(fname='astorb.dat', short=False):
 
     # Return
     return df
-
-
-def load_mpcorb(fname='PHA.txt'):
-    """
-    http://www.minorplanetcenter.net/iau/MPCORB.html
-    http://www.minorplanetcenter.net/iau/info/MPOrbitFormat.html
-    """
