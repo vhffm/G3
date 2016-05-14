@@ -24,6 +24,9 @@ def load_astorb(fname='astorb.dat', short=False):
     Takes ~8 Minutes for Full File (~670k Rows).
     Cf. ftp://cdsarc.u-strasbg.fr/pub/cats/B/astorb/astorb.html
 
+    Details on Columns in ReadMe.
+    Cf. ftp://cdsarc.u-strasbg.fr/pub/cats/B/astorb/ReadMe
+
     @param: fname - Filename for Asteroid Database [String]
     @return: df   - Minor Bodies Orbital Databse   [Pandas Dataframe]
     """
