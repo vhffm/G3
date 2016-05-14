@@ -34,9 +34,9 @@ def load_astorb(fname='astorb.dat', short=False):
     # end is the column number of the last letter
 
     # Ka-Ching
-    colspecs = [ (0, 6), (7, 25), (26, 41), (42, 48), (49, 53), 
-                 (54, 58), (59, 64), (65, 72), (73, 94), (95, 100), \
-                 (101, 105), (106, 114), (115, 125), (126, 136), \
+    colspecs = [ (0, 6), (7, 25), (26, 41), (42, 48), \
+                 (49, 53), (54, 58), (59, 64), (65, 72), (73, 94), \
+                 (95, 100), (101, 105), (106, 114), (115, 125), (126, 136), \
                  (137, 147), (148, 157), (158, 168), (169, 181), \
                  (182, 190), (191, 198), (199, 207), (208, 216), \
                  (217, 224), (225, 233), (234, 241), (242, 250), \
@@ -166,3 +166,10 @@ def load_astorb(fname='astorb.dat', short=False):
 
     # Return
     return df
+
+
+def load_mpcorb(fname='PHA.txt'):
+    """
+    http://www.minorplanetcenter.net/iau/MPCORB.html
+    http://www.minorplanetcenter.net/iau/info/MPOrbitFormat.html
+    """
