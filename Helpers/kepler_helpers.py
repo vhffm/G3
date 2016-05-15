@@ -8,6 +8,7 @@ cf. http://server.faia.upm.es/moda/curso1112/kepler.pdf
 
 import numpy as np
 import vector_helpers as vh
+import constants as C
 
 def helio2bary(r_h, v_h, m, return_sun=False, central_mass=1.0):
     """
@@ -299,6 +300,9 @@ def kep2cart(a, ecc, inc, Omega, omega, M, mass, central_mass=1.0):
     # Build Arrays
     r = np.array([x,y,z])
     v = np.array([vx,vy,vz])
+
+    # Fix Units
+    v *= C.genga_to_kms
 
     # Return
     return r, v
