@@ -14,7 +14,6 @@ Changes:
 
 * 15 May 2016 / Volker Hoffmann <volker@cheleb.net>
   Initial Release
-
 """
 
 import sys
