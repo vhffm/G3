@@ -7,6 +7,9 @@ $ python ./genic_astorb.py --fname_in astorb.hdf5 --crossers > initial.dat
 Changes:
 
 * 15 May 2016 / Volker Hoffmann <volker@cheleb.net>
+  Limit Number of Objects (--limit)
+
+* 15 May 2016 / Volker Hoffmann <volker@cheleb.net>
   Add Perturbed Clone Generator (--clones)
 
 * 15 May 2016 / Volker Hoffmann <volker@cheleb.net>
@@ -28,6 +31,8 @@ parser.add_argument('--fname_in', required=True, \
                     help='Name of Astorb Source File.')
 parser.add_argument('--clones', action='store_true', \
                    help="Generate Perturbed Clones for Each Crosser.")
+parser.add_argument('--limit', type=int, default=-1, \
+                   help="Limit Number of Objects.")
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--crossers', action='store_true', \
                    help="Use Earth Crossers (~1'000).")
@@ -44,6 +49,11 @@ df = pd.read_hdf("%s" % args.fname_in, 'df')
 if args.crossers:
     sys.stderr.write('// Select Earth Crossers\n')
     df = df[df.Xflg==1]
+
+# Limit Number of Objects
+if args.limit > 0:
+    sys.stderr.write("// Limiting to %i Objects\n" % args.limit)
+    df = df.head(args.limit)
 
 # Generate IC Lines
 if args.clones:
