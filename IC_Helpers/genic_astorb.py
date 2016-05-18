@@ -7,6 +7,9 @@ $ python ./genic_astorb.py --fname_in astorb.hdf5 --crossers > initial.dat
 Changes:
 
 * 18 May 2016 / Volker Hoffmann <volker@cheleb.net>
+  Select 3200 Phaethon, 1566 Icarus (--aswin)
+
+* 18 May 2016 / Volker Hoffmann <volker@cheleb.net>
   Shift Clones in Argument of Perihelion (--clones_omega)
   Shift Clones in Semi-Major Axis (--clones_a)
 
@@ -42,6 +45,8 @@ group1.add_argument('--clones_omega', action='store_true', \
 group2 = parser.add_mutually_exclusive_group(required=True)
 group2.add_argument('--crossers', action='store_true', \
                     help="Use Earth Crossers (~1'000).")
+group2.add_argument('--aswin', action='store_true', \
+                    help="Use Aswin's Objects of Interest.")
 group2.add_argument('--all', action='store_true', \
                     help="Use All Asteroid (~600'000).")
 args = parser.parse_args()
@@ -55,6 +60,12 @@ df = pd.read_hdf("%s" % args.fname_in, 'df')
 if args.crossers:
     sys.stderr.write('// Select Earth Crossers\n')
     df = df[df.Xflg==1]
+
+# Select Aswin's Objects
+if args.aswin:
+    sys.stderr.write("// Selecting Aswins's Objects of Interest\n")
+    sys.stderr.write('   3200 Phaethon, 1566 Icarus\n')
+    df = df[df.Name.str.contains('Phaethon|Icarus')]
 
 # Limit Number of Objects
 if args.limit > 0:
