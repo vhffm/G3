@@ -6,6 +6,10 @@ $ python ./genic_astorb.py --fname_in astorb.hdf5 --crossers > initial.dat
 
 Changes:
 
+* 18 May 2016 / Volker Hoffmann <volker@cheleb.net>
+  Shift Clones in Argument of Perihelion (--clones_omega)
+  Shift Clones in Semi-Major Axis (--clones_a)
+
 * 15 May 2016 / Volker Hoffmann <volker@cheleb.net>
   Limit Number of Objects (--limit)
 
@@ -28,15 +32,18 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('--fname_in', required=True, \
                     help='Name of Astorb Source File.')
-parser.add_argument('--clones', action='store_true', \
-                   help="Generate Perturbed Clones for Each Crosser.")
 parser.add_argument('--limit', type=int, default=-1, \
                    help="Limit Number of Objects.")
-group = parser.add_mutually_exclusive_group(required=True)
-group.add_argument('--crossers', action='store_true', \
-                   help="Use Earth Crossers (~1'000).")
-group.add_argument('--all', action='store_true', \
-                   help="Use All Asteroid (~600'000).")
+group1 = parser.add_mutually_exclusive_group(required=False)
+group1.add_argument('--clones_a', action='store_true', \
+                    help="Clone & Perturb Semi-Major Axis.")
+group1.add_argument('--clones_omega', action='store_true', \
+                    help="Clone & Perturb Argument of Perigee.")
+group2 = parser.add_mutually_exclusive_group(required=True)
+group2.add_argument('--crossers', action='store_true', \
+                    help="Use Earth Crossers (~1'000).")
+group2.add_argument('--all', action='store_true', \
+                    help="Use All Asteroid (~600'000).")
 args = parser.parse_args()
 
 # Load Data
@@ -55,7 +62,7 @@ if args.limit > 0:
     df = df.head(args.limit)
 
 # Generate IC Lines
-if args.clones:
+if args.clones_a:
     sys.stderr.write('// Generating Genga IC Lines, With Clones\n')
     pid_base = 10000; lines = []
 
@@ -74,6 +81,33 @@ if args.clones:
             x, v = \
                 kh.kep2cart(row.a * da, row.e, row.i * C.d2r, \
                             row.Omega * C.d2r, row.omega * C.d2r, \
+                            row.M * C.d2r, \
+                            0.0, 1.0)
+            v *= C.kms_to_genga
+
+            # Format IC Line
+            line = "0.0 %06d %.16e %.16e " % ( pid_base + jj, 0.0, \
+                                               row.Diameter / C.au2km )
+            line += "%+.16e %+.16e %+.16e " % ( x[0], x[1], x[2] )
+            line += "%+.16e %+.16e %+.16e " % ( v[0], v[1], v[2] )
+            line += "0.0 0.0 0.0"
+            lines.append(line)
+
+        # Base Particle ID Counter
+        pid_base += 100
+
+elif args.clones_omega:
+    sys.stderr.write('// Generating Genga IC Lines, With Clones\n')
+    pid_base = 10000; lines = []
+
+    domega_all = np.array([ 0.0, -0.01, -0.1, +0.1, +0.01 ])
+
+    for ii, [ irow, row ] in enumerate(df.iterrows()):
+        for jj, domega in enumerate(domega_all):
+            # Convert to Cartesian State Vector
+            x, v = \
+                kh.kep2cart(row.a, row.e, row.i * C.d2r, \
+                            row.Omega * C.d2r, (row.omega + domega) * C.d2r, \
                             row.M * C.d2r, \
                             0.0, 1.0)
             v *= C.kms_to_genga
