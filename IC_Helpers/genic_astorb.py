@@ -4,7 +4,7 @@ Generate Genga Initial Conditions File from Astorb Entries.
 Usage:
 $ python ./genic_astorb.py --fname_in astorb.hdf5 --crossers > initial.dat
 
-Changes:
+Major Changes:
 
 * 18 May 2016 / Volker Hoffmann <volker@cheleb.net>
   Select 3200 Phaethon, 1566 Icarus (--aswin)
