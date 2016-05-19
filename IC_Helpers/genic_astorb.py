@@ -66,6 +66,7 @@ if args.aswin:
     sys.stderr.write("// Selecting Aswins's Objects of Interest\n")
     sys.stderr.write('   3200 Phaethon, 1566 Icarus\n')
     df = df[df.Name.str.contains('Phaethon|Icarus')]
+    df = df.sort_values(by='Name')
 
 # Limit Number of Objects
 if args.limit > 0:
