@@ -112,7 +112,7 @@ elif args.clones_omega:
     sys.stderr.write('// Generating Genga IC Lines, With Clones\n')
     pid_base = 10000; lines = []
 
-    domega_all = np.array([ 0.0, -0.01, -0.1, +0.1, +0.01 ])
+    domega_all = np.concatenate([np.array([0.0]), np.logspace(-15,-1,15)])
 
     for ii, [ irow, row ] in enumerate(df.iterrows()):
         for jj, domega in enumerate(domega_all):
