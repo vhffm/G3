@@ -82,128 +82,141 @@ for nstep in nsteps:
                 dfo = dfo_all[irun]
                 dfr = dfr_all[irun]
 
-                # Pick Step
-                dfo = dfo[dfo.nstep == nstep]
-                dfr = dfr[dfr.nstep == nstep]
+                # Does Step Exist?
+                if nstep in dfo.nstep.unique():
 
-                # Extract Jupiter Semi-Major Axis
-                a_j = dfo[dfo.pid == 2000].a.iloc[0]
+                    # Pick Step
+                    dfo = dfo[dfo.nstep == nstep]
+                    dfr = dfr[dfr.nstep == nstep]
 
-                # Extract Jupiter Crossing Orbits
-                Q_cross = a_j
-                e_cross = np.linspace(0,1,128)
-                a_cross = Q_cross / ( 1.0 + e_cross )
+                    # Extract Jupiter Semi-Major Axis
+                    a_j = dfo[dfo.pid == 2000].a.iloc[0]
 
-                # Remove Giant Planets
-                dfo = dfo[dfo.mass < 5.0]
+                    # Extract Jupiter Crossing Orbits
+                    Q_cross = a_j
+                    e_cross = np.linspace(0,1,128)
+                    a_cross = Q_cross / ( 1.0 + e_cross )
 
-                # Scale Line
-                ms, ns = oh.mkline(5.0/2000.0, 2.0, 2.0, 36.0)
-                ss = np.asarray(dfo.mass * ms + ns)
+                    # Remove Giant Planets
+                    dfo = dfo[dfo.mass < 5.0]
 
-                # #############################################
-                # #############################################
-                # PLANETESIMALS
-                # #############################################
-                # #############################################
-                
-                # Planetesimals
-                ax.scatter(dfo.a, dfo.e, s=ss**2.0, \
-                           c='k', edgecolor='none', alpha=0.8, zorder=0)
+                    # Scale Line
+                    ms, ns = oh.mkline(5.0/2000.0, 2.0, 2.0, 36.0)
+                    ss = np.asarray(dfo.mass * ms + ns)
 
-                # #############################################
-                # #############################################
-                # RESONANCE LOCATIONS
-                # #############################################
-                # #############################################
+                    # #############################################
+                    # #############################################
+                    # PLANETESIMALS
+                    # #############################################
+                    # #############################################
 
-                # Resonances (Secular)
-                ax.plot([dfr.nu_5.iloc[0], dfr.nu_5.iloc[0]], \
-                        [0, 1], \
-                        'k', lw=0.5, label='nu_5', zorder=-10)
-                ax.plot([dfr.nu_6.iloc[0], dfr.nu_6.iloc[0]], \
-                        [0, 1], \
-                        'k', lw=0.5, label='nu_6', zorder=-10)
-                if not np.isnan(dfr.nu_16_01.iloc[0]):
-                    ax.plot([dfr.nu_16_01.iloc[0], dfr.nu_16_01.iloc[0]], \
+                    # Planetesimals
+                    ax.scatter(dfo.a, dfo.e, s=ss**2.0, \
+                               c='k', edgecolor='none', alpha=0.8, zorder=0)
+
+                    # #############################################
+                    # #############################################
+                    # RESONANCE LOCATIONS
+                    # #############################################
+                    # #############################################
+
+                    # Resonances (Secular)
+                    ax.plot([dfr.nu_5.iloc[0], dfr.nu_5.iloc[0]], \
                             [0, 1], \
-                            'k', lw=0.5, label='nu_16', zorder=-10)
-                if not np.isnan(dfr.nu_16_02.iloc[0]):
-                    ax.plot([dfr.nu_16_02.iloc[0], dfr.nu_16_02.iloc[0]], \
+                            'k', lw=0.5, label='nu_5', zorder=-10)
+                    ax.plot([dfr.nu_6.iloc[0], dfr.nu_6.iloc[0]], \
                             [0, 1], \
-                            'k', lw=0.5, label='nu_16', zorder=-10)
-                
-                # Resonances (MMR)
-                ax.plot([dfr.two_to_one.iloc[0], dfr.two_to_one.iloc[0]], \
-                        [0, 1], \
-                        color=(0.6,0.6,0.6), lw=0.5, label='2:1', zorder=-10)
-                ax.plot([dfr.three_to_one.iloc[0], dfr.three_to_one.iloc[0]], \
-                        [0, 1], \
-                        color=(0.6,0.6,0.6), lw=0.5, label='3:1', zorder=-10)
-                ax.plot([dfr.three_to_two.iloc[0], dfr.three_to_two.iloc[0]], \
-                        [0, 1], \
-                        color=(0.6,0.6,0.6), lw=0.5, label='3:2', zorder=-10)
+                            'k', lw=0.5, label='nu_6', zorder=-10)
+                    if not np.isnan(dfr.nu_16_01.iloc[0]):
+                        ax.plot([dfr.nu_16_01.iloc[0], dfr.nu_16_01.iloc[0]], \
+                                [0, 1], \
+                                'k', lw=0.5, label='nu_16', zorder=-10)
+                    if not np.isnan(dfr.nu_16_02.iloc[0]):
+                        ax.plot([dfr.nu_16_02.iloc[0], dfr.nu_16_02.iloc[0]], \
+                                [0, 1], \
+                                'k', lw=0.5, label='nu_16', zorder=-10)
 
-                # #############################################
-                # #############################################
-                # ANNOTATIONS
-                # #############################################
-                # #############################################
+                    # Resonances (MMR)
+                    ax.plot([dfr.two_to_one.iloc[0], dfr.two_to_one.iloc[0]], \
+                            [0, 1], \
+                            color=(0.6,0.6,0.6), lw=0.5, \
+                            label='2:1', zorder=-10)
+                    ax.plot([dfr.three_to_one.iloc[0], \
+                             dfr.three_to_one.iloc[0]], \
+                            [0, 1], \
+                            color=(0.6,0.6,0.6), lw=0.5, \
+                            label='3:1', zorder=-10)
+                    ax.plot([dfr.three_to_two.iloc[0], \
+                             dfr.three_to_two.iloc[0]], \
+                            [0, 1], \
+                            color=(0.6,0.6,0.6), lw=0.5, \
+                            label='3:2', zorder=-10)
 
-                # Annotate (Secular)
-                ax.text(dfr.nu_5.iloc[0], 0.55, \
-                        r'$\nu_5$', transform=ax.transData, \
-                        va='center', ha='center', \
-                        bbox=dict(facecolor='w', lw=0.5), fontsize='small')
+                    # #############################################
+                    # #############################################
+                    # ANNOTATIONS
+                    # #############################################
+                    # #############################################
 
-                ax.text(dfr.nu_6.iloc[0], 0.55, \
-                        r'$\nu_6$', transform=ax.transData, \
-                        va='center', ha='center', \
-                        bbox=dict(facecolor='w', lw=0.5), fontsize='small')
-                
-                if not np.isnan(dfr.nu_16_01.iloc[0]):
-                    ax.text(dfr.nu_16_01.iloc[0], 0.55, \
-                            r'$\nu_{16}$', transform=ax.transData, \
-                            va='center', ha='center', \
-                            bbox=dict(facecolor='w', lw=0.5), fontsize='small')
-                if not np.isnan(dfr.nu_16_02.iloc[0]):
-                    ax.text(dfr.nu_16_02.iloc[0], 0.55, \
-                            r'$\nu_{16}$', transform=ax.transData, \
+                    # Annotate (Secular)
+                    ax.text(dfr.nu_5.iloc[0], 0.55, \
+                            r'$\nu_5$', transform=ax.transData, \
                             va='center', ha='center', \
                             bbox=dict(facecolor='w', lw=0.5), fontsize='small')
 
-                # Annotate (MMR)
-                ax.text(dfr.two_to_one.iloc[0], 0.475, \
-                        r'$2:1$', transform=ax.transData, \
-                        va='center', ha='center', \
-                        bbox=dict(facecolor='w', lw=0.5), fontsize='x-small')
+                    ax.text(dfr.nu_6.iloc[0], 0.55, \
+                            r'$\nu_6$', transform=ax.transData, \
+                            va='center', ha='center', \
+                            bbox=dict(facecolor='w', lw=0.5), fontsize='small')
 
-                ax.text(dfr.three_to_one.iloc[0], 0.475, \
-                        r'$3:1$', transform=ax.transData, \
-                        va='center', ha='center', \
-                        bbox=dict(facecolor='w', lw=0.5), fontsize='x-small')
+                    if not np.isnan(dfr.nu_16_01.iloc[0]):
+                        ax.text(dfr.nu_16_01.iloc[0], 0.55, \
+                                r'$\nu_{16}$', transform=ax.transData, \
+                                va='center', ha='center', \
+                                bbox=dict(facecolor='w', lw=0.5), \
+                                fontsize='small')
+                    if not np.isnan(dfr.nu_16_02.iloc[0]):
+                        ax.text(dfr.nu_16_02.iloc[0], 0.55, \
+                                r'$\nu_{16}$', transform=ax.transData, \
+                                va='center', ha='center', \
+                                bbox=dict(facecolor='w', lw=0.5), \
+                                fontsize='small')
 
-                ax.text(dfr.three_to_two.iloc[0], 0.475, \
-                        r'$3:2$', transform=ax.transData, \
-                        va='center', ha='center', \
-                        bbox=dict(facecolor='w', lw=0.5), fontsize='x-small')
+                    # Annotate (MMR)
+                    ax.text(dfr.two_to_one.iloc[0], 0.475, \
+                            r'$2:1$', transform=ax.transData, \
+                            va='center', ha='center', \
+                            bbox=dict(facecolor='w', lw=0.5), \
+                            fontsize='x-small')
 
-                # #############################################
-                # #############################################
-                # CUTOFF, JUPITER CROSSING
-                # #############################################
-                # #############################################
+                    ax.text(dfr.three_to_one.iloc[0], 0.475, \
+                            r'$3:1$', transform=ax.transData, \
+                            va='center', ha='center', \
+                            bbox=dict(facecolor='w', lw=0.5), \
+                            fontsize='x-small')
 
-                # Jupiter Crossing
-                # ax.plot(a_cross, e_cross, 'k--')
-                ax.fill_between(a_cross, e_cross, 0.6, \
-                                lw=0, facecolor='r', \
-                                alpha=0.1, zorder=-20)
+                    ax.text(dfr.three_to_two.iloc[0], 0.475, \
+                            r'$3:2$', transform=ax.transData, \
+                            va='center', ha='center', \
+                            bbox=dict(facecolor='w', lw=0.5), \
+                            fontsize='x-small')
 
-                # Inner Cutoff
-                ax.fill_between([0.0, 0.1], 0.0, 0.6, \
-                                lw=0, facecolor='r', \
-                                alpha=0.1, zorder=20)
+                    # #############################################
+                    # #############################################
+                    # CUTOFF, JUPITER CROSSING
+                    # #############################################
+                    # #############################################
+
+                    # Jupiter Crossing
+                    # ax.plot(a_cross, e_cross, 'k--')
+                    ax.fill_between(a_cross, e_cross, 0.6, \
+                                    lw=0, facecolor='r', \
+                                    alpha=0.1, zorder=-20)
+
+                    # Inner Cutoff
+                    ax.fill_between([0.0, 0.1], 0.0, 0.6, \
+                                    lw=0, facecolor='r', \
+                                    alpha=0.1, zorder=20)
             
     # #############################################
     # #############################################
