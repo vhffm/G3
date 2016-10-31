@@ -16,7 +16,14 @@ import pandas as pd
 import sys
 import other_helpers as oh
 import constants as C
+import argparse
 
+
+# Parse Arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--zoom", action="store_true", \
+                    help="Zoom On Inner Region.")
+args = parser.parse_args()
 
 # List of Directories
 if sys.stdin.isatty():
@@ -210,7 +217,7 @@ for nstep in nsteps:
         # #############################################
         # #############################################
 
-        if not fnames_res_all[isim][0] == 'NONE':
+        if not fnames_res_all[isim][0] == 'NONE' and not args.zoom:
 
             # Annotate (Secular)
             ax.text(dfr.nu_5.iloc[0], 0.55, \
@@ -285,8 +292,12 @@ for nstep in nsteps:
             
     # Limits
     for ax in axarr.flatten():
-        ax.set_xlim([0,5])
-        ax.set_ylim([0,0.6])
+        if args.zoom:
+            ax.set_xlim([0,1])
+            ax.set_ylim([0,0.15])
+        else:
+            ax.set_xlim([0,5])
+            ax.set_ylim([0,0.6])
         
     # Ticks
     for ax in axarr.flatten():
