@@ -297,7 +297,7 @@ for nstep in nsteps:
             
     # Title, Legend
     tout = dfo.time.iloc[0]
-    txtsup = "nstep = %012d // time = %.2e Myr" % (nstep, tout)
+    txtsup = "nstep = %012d // time = %.2e Yr" % (nstep, tout)
     txtsup += "  // (Embryos/Planets, Planetesimals, Total Particles)"
     fig.suptitle(txtsup, fontsize='small')
 
